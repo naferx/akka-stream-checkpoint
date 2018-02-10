@@ -14,6 +14,7 @@ final case class Checkpoint[T](label: String) extends GraphStage[FlowShape[T, T]
 
   private val pullCounter      = Kamon.metrics.counter(label + "_pull")
   private val pushCounter      = Kamon.metrics.counter(label + "_push")
+  private val statusCounter    = Kamon.metrics.minMaxCounter(label + "_status")
   private val latencyHistogram = Kamon.metrics.histogram(label + "_latency")
 
   override def initialAttributes: Attributes = Attributes.name("checkpoint")
@@ -28,11 +29,12 @@ final case class Checkpoint[T](label: String) extends GraphStage[FlowShape[T, T]
 
       override def onPush(): Unit = {
         try {
+          push(out, grab(in))
+
           val latency = System.nanoTime() - lastPulled
           latencyHistogram.record(latency)
           pushCounter.increment()
-
-          push(out, grab(in))
+          statusCounter.decrement()
         } catch {
           case NonFatal(ex) ⇒ decider(ex) match {
             case Supervision.Stop ⇒ failStage(ex)
@@ -42,10 +44,11 @@ final case class Checkpoint[T](label: String) extends GraphStage[FlowShape[T, T]
       }
 
       override def onPull(): Unit = {
+        pull(in)
+
         lastPulled = System.nanoTime()
         pullCounter.increment()
-
-        pull(in)
+        statusCounter.increment()
       }
 
       setHandlers(in, out, this)
