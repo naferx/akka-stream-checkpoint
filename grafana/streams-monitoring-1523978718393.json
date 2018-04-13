@@ -42,7 +42,7 @@
   "rows": [
     {
       "collapse": false,
-      "height": "250px",
+      "height": 263,
       "panels": [
         {
           "aliasColors": {},
@@ -76,18 +76,30 @@
           "steppedLine": false,
           "targets": [
             {
+              "hide": false,
               "refId": "A",
-              "target": "alias(stats.counters.akka-stream-monitoring-demo.svezfaz.counter.A_pull.rate, 'A')"
+              "target": "dropwizard.A_pull.m1_rate"
             },
             {
+              "hide": false,
               "refId": "B",
-              "target": "alias(stats.counters.akka-stream-monitoring-demo.svezfaz.counter.B_pull.rate, 'B')"
+              "target": "dropwizard.B_pull.m1_rate"
+            },
+            {
+              "hide": false,
+              "refId": "C",
+              "target": "dropwizard.C_pull.m1_rate"
+            },
+            {
+              "hide": false,
+              "refId": "D",
+              "target": "dropwizard.D_pull.m1_rate"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pull Rate",
+          "title": "Pull Throughput",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -127,7 +139,7 @@
           "dashes": false,
           "datasource": "${DS_LOCAL_GRAPHITE}",
           "fill": 1,
-          "id": 2,
+          "id": 4,
           "legend": {
             "avg": false,
             "current": false,
@@ -152,18 +164,30 @@
           "steppedLine": false,
           "targets": [
             {
+              "hide": false,
               "refId": "A",
-              "target": "alias(stats.counters.akka-stream-monitoring-demo.svezfaz.counter.A_push.rate, 'A')"
+              "target": "dropwizard.A_push.m1_rate"
             },
             {
+              "hide": false,
               "refId": "B",
-              "target": "alias(stats.counters.akka-stream-monitoring-demo.svezfaz.counter.B_push.rate, 'B')"
+              "target": "dropwizard.B_push.m1_rate"
+            },
+            {
+              "hide": false,
+              "refId": "C",
+              "target": "dropwizard.C_push.m1_rate"
+            },
+            {
+              "hide": false,
+              "refId": "D",
+              "target": "dropwizard.D_push.m1_rate"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Push Rate",
+          "title": "Push Throughput",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -240,18 +264,30 @@
           "steppedLine": false,
           "targets": [
             {
+              "hide": false,
               "refId": "A",
-              "target": "alias(stats.timers.akka-stream-monitoring-demo.svezfaz.histogram.A_latency.mean, 'A')"
+              "target": "dropwizard.A_pull.mean"
             },
             {
+              "hide": false,
               "refId": "B",
-              "target": "alias(stats.timers.akka-stream-monitoring-demo.svezfaz.histogram.B_latency.mean, 'B')"
+              "target": "dropwizard.B_pull.mean"
+            },
+            {
+              "hide": false,
+              "refId": "C",
+              "target": "dropwizard.C_pull.mean"
+            },
+            {
+              "hide": false,
+              "refId": "D",
+              "target": "dropwizard.D_pull.mean"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pull-Push Latency",
+          "title": "Pull Latency",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -291,7 +327,7 @@
           "dashes": false,
           "datasource": "${DS_LOCAL_GRAPHITE}",
           "fill": 1,
-          "id": 4,
+          "id": 2,
           "legend": {
             "avg": false,
             "current": false,
@@ -316,18 +352,158 @@
           "steppedLine": false,
           "targets": [
             {
+              "hide": false,
               "refId": "A",
-              "target": "alias(stats.timers.akka-stream-monitoring-demo.svezfaz.min-max-counter.A_status.upper, 'A')"
+              "target": "dropwizard.A_push.mean"
             },
             {
+              "hide": false,
               "refId": "B",
-              "target": "alias(stats.timers.akka-stream-monitoring-demo.svezfaz.min-max-counter.B_status.upper, 'B')"
+              "target": "dropwizard.B_push.mean"
+            },
+            {
+              "hide": false,
+              "refId": "C",
+              "target": "dropwizard.C_push.mean"
+            },
+            {
+              "hide": false,
+              "refId": "D",
+              "target": "dropwizard.D_push.mean"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pull-Push Status",
+          "title": "Push Latency",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 250,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_LOCAL_GRAPHITE}",
+          "fill": 1,
+          "id": 5,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "hide": true,
+              "refId": "A",
+              "target": "dropwizard.A_pull.mean"
+            },
+            {
+              "hide": true,
+              "refId": "B",
+              "target": "dropwizard.B_pull.mean"
+            },
+            {
+              "hide": true,
+              "refId": "C",
+              "target": "dropwizard.C_pull.mean"
+            },
+            {
+              "hide": true,
+              "refId": "D",
+              "target": "sumSeries(dropwizard.A_push.mean, #A)",
+              "targetFull": "sumSeries(dropwizard.A_push.mean, dropwizard.A_pull.mean)"
+            },
+            {
+              "hide": true,
+              "refId": "E",
+              "target": "sumSeries(dropwizard.B_push.mean, #B)",
+              "targetFull": "sumSeries(dropwizard.B_push.mean, dropwizard.B_pull.mean)"
+            },
+            {
+              "hide": true,
+              "refId": "F",
+              "target": "sumSeries(dropwizard.C_push.mean, #C)",
+              "targetFull": "sumSeries(dropwizard.C_push.mean, dropwizard.C_pull.mean)"
+            },
+            {
+              "refId": "J",
+              "target": "asPercent(dropwizard.A_pull.mean, #D)",
+              "targetFull": "asPercent(dropwizard.A_pull.mean, sumSeries(dropwizard.A_push.mean, dropwizard.A_pull.mean))"
+            },
+            {
+              "refId": "K",
+              "target": "asPercent(dropwizard.B_pull.mean, #E)",
+              "targetFull": "asPercent(dropwizard.B_pull.mean, sumSeries(dropwizard.B_push.mean, dropwizard.B_pull.mean))"
+            },
+            {
+              "refId": "L",
+              "target": "asPercent(dropwizard.C_pull.mean, #F)",
+              "targetFull": "asPercent(dropwizard.C_pull.mean, sumSeries(dropwizard.C_push.mean, dropwizard.C_pull.mean))"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Backpressure %",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -416,6 +592,6 @@
     ]
   },
   "timezone": "",
-  "title": "Streams Monitoring Demo",
-  "version": 3
+  "title": "streams-monitoring",
+  "version": 2
 }
