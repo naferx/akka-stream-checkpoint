@@ -1,30 +1,25 @@
 package eu.svez.monitoring.experiments
 
-import akka.{Done, NotUsed}
-import akka.actor.ActorSystem
-import akka.pattern.after
-import akka.stream.scaladsl.{Sink, Source}
-import akka.stream.{ActorMaterializer, ActorMaterializerSettings}
-import com.codahale.metrics.MetricRegistry
-
-import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
-import com.codahale.metrics.MetricFilter
-import com.codahale.metrics.graphite.Graphite
-import com.codahale.metrics.graphite.GraphiteReporter
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
-import eu.svez.monitoring.experiments.HelloWorldMonitored.ioSimulation
+import akka.actor.ActorSystem
+import akka.pattern.after
+import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.{Sink, Source}
+import akka.{Done, NotUsed}
+import com.codahale.metrics.{MetricFilter, MetricRegistry}
+import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
 
-object HelloWorldMonitored extends App {
+import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
 
-  implicit val system: ActorSystem                = ActorSystem("stream-demo")
+object Demo extends App {
+
+  implicit val system: ActorSystem                = ActorSystem("monitoring-stream-demo")
   implicit val executionContext: ExecutionContext = system.dispatcher
 
-  implicit val materializer: ActorMaterializer = ActorMaterializer(
-    ActorMaterializerSettings(system).withInputBuffer(initialSize = 1, maxSize = 1)
-  )
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   def ioSimulation(duration: FiniteDuration)(n: Long): Future[Long] =
     if (duration == Duration.Zero)
@@ -126,9 +121,9 @@ object HelloWorldMonitored extends App {
   def haltingStream: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
       .via(Checkpoint("A"))
-      .mapAsync(1)(x ⇒ if (x < 100) fastIOSimulation(x) else ioSimulation(1.hour)(x))
-      .via(Checkpoint("B"))
       .mapAsync(1)(fastIOSimulation)
+      .via(Checkpoint("B"))
+      .mapAsync(1)(x ⇒ if (x < 100) fastIOSimulation(x) else ioSimulation(1.hour)(x))
       .via(Checkpoint("C"))
       .runWith(Sink.foreach(println))
 

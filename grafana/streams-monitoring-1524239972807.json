@@ -152,6 +152,178 @@
           "dashes": false,
           "datasource": "${DS_LOCAL_GRAPHITE}",
           "fill": 1,
+          "id": 9,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refId": "A",
+              "target": "alias(dropwizard.A_pull.p99, 'A')"
+            },
+            {
+              "refId": "B",
+              "target": "alias(dropwizard.B_pull.p99, 'B')"
+            },
+            {
+              "refId": "C",
+              "target": "alias(dropwizard.C_pull.p99, 'C')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Pull Latency (p99)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_LOCAL_GRAPHITE}",
+          "fill": 1,
+          "id": 10,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refId": "A",
+              "target": "alias(dropwizard.A_push.p99, 'A')"
+            },
+            {
+              "refId": "B",
+              "target": "alias(dropwizard.B_push.p99, 'B')"
+            },
+            {
+              "refId": "C",
+              "target": "alias(dropwizard.C_push.p99, 'C')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Push Latency (p99)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 250,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_LOCAL_GRAPHITE}",
+          "fill": 1,
           "id": 3,
           "legend": {
             "avg": false,
@@ -179,23 +351,23 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "alias(dropwizard.A_pull.p99, 'A')"
+              "target": "alias(dropwizard.A_pull.mean, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "alias(dropwizard.B_pull.p99, 'B')"
+              "target": "alias(dropwizard.B_pull.mean, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "alias(dropwizard.C_pull.p99, 'C')"
+              "target": "alias(dropwizard.C_pull.mean, 'C')"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pull Latency",
+          "title": "Pull Latency (mean)",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -262,23 +434,23 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "alias(dropwizard.A_push.p99, 'A')"
+              "target": "alias(dropwizard.A_push.mean, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "alias(dropwizard.B_push.p99, 'B')"
+              "target": "alias(dropwizard.B_push.mean, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "alias(dropwizard.C_push.p99, 'C')"
+              "target": "alias(dropwizard.C_push.mean, 'C')"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Push Latency",
+          "title": "Push Latency (mean)",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -321,7 +493,7 @@
     },
     {
       "collapse": false,
-      "height": 250,
+      "height": 274,
       "panels": [
         {
           "aliasColors": {},
@@ -722,7 +894,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-2m",
     "to": "now"
   },
   "timepicker": {
