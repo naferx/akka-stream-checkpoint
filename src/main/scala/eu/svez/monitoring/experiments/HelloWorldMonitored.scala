@@ -53,13 +53,7 @@ object HelloWorldMonitored extends App {
     .build(new Graphite(new InetSocketAddress("localhost", 2003)))
     .start(1, TimeUnit.SECONDS)
 
-  backpressuringWithExpanding
-
-//  Source.tick(1.second, 1.second, NotUsed).zipWithIndex.map(_._2)
-//    .via(Checkpoint("A"))
-//    .mapConcat(x ⇒ List(x, x + 0.5))
-//    .via(Checkpoint("B"))
-//    .runWith(Sink.foreach(println))
+  haltingStream
 
   // fast - fast: no backpressure
   def noBackpressure: Future[Done] =
@@ -128,6 +122,17 @@ object HelloWorldMonitored extends App {
       .mapAsync(1)(slowIOSimulation)
       .via(Checkpoint("C"))
       .runWith(Sink.foreach(println))
+
+  def haltingStream: Future[Done] =
+    Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
+      .via(Checkpoint("A"))
+      .mapAsync(1)(x ⇒ if (x < 100) fastIOSimulation(x) else ioSimulation(1.hour)(x))
+      .via(Checkpoint("B"))
+      .mapAsync(1)(fastIOSimulation)
+      .via(Checkpoint("C"))
+      .runWith(Sink.foreach(println))
+
+
 
 }
 

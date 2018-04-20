@@ -27,6 +27,12 @@
       "id": "graphite",
       "name": "Graphite",
       "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "singlestat",
+      "name": "Singlestat",
+      "version": ""
     }
   ],
   "annotations": {
@@ -42,96 +48,8 @@
   "rows": [
     {
       "collapse": false,
-      "height": 263,
+      "height": 244,
       "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_LOCAL_GRAPHITE}",
-          "fill": 1,
-          "id": 1,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "hide": false,
-              "refId": "A",
-              "target": "dropwizard.A_pull.m1_rate"
-            },
-            {
-              "hide": false,
-              "refId": "B",
-              "target": "dropwizard.B_pull.m1_rate"
-            },
-            {
-              "hide": false,
-              "refId": "C",
-              "target": "dropwizard.C_pull.m1_rate"
-            },
-            {
-              "hide": false,
-              "refId": "D",
-              "target": "dropwizard.D_pull.m1_rate"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Pull Throughput",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
         {
           "aliasColors": {},
           "bars": false,
@@ -159,35 +77,30 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
-          "span": 6,
+          "span": 12,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
               "hide": false,
               "refId": "A",
-              "target": "dropwizard.A_push.m1_rate"
+              "target": "alias(dropwizard.A_push.m1_rate, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "dropwizard.B_push.m1_rate"
+              "target": "alias(dropwizard.B_push.m1_rate, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "dropwizard.C_push.m1_rate"
-            },
-            {
-              "hide": false,
-              "refId": "D",
-              "target": "dropwizard.D_push.m1_rate"
+              "target": "alias(dropwizard.C_push.m1_rate, 'C')"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Push Throughput",
+          "title": "Throughput",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -266,22 +179,17 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "dropwizard.A_pull.mean"
+              "target": "alias(dropwizard.A_pull.p99, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "dropwizard.B_pull.mean"
+              "target": "alias(dropwizard.B_pull.p99, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "dropwizard.C_pull.mean"
-            },
-            {
-              "hide": false,
-              "refId": "D",
-              "target": "dropwizard.D_pull.mean"
+              "target": "alias(dropwizard.C_pull.p99, 'C')"
             }
           ],
           "thresholds": [],
@@ -354,22 +262,17 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "dropwizard.A_push.mean"
+              "target": "alias(dropwizard.A_push.p99, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "dropwizard.B_push.mean"
+              "target": "alias(dropwizard.B_push.p99, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "dropwizard.C_push.mean"
-            },
-            {
-              "hide": false,
-              "refId": "D",
-              "target": "dropwizard.D_push.mean"
+              "target": "alias(dropwizard.C_push.p99, 'C')"
             }
           ],
           "thresholds": [],
@@ -486,18 +389,18 @@
             },
             {
               "refId": "J",
-              "target": "asPercent(dropwizard.A_pull.mean, #D)",
-              "targetFull": "asPercent(dropwizard.A_pull.mean, sumSeries(dropwizard.A_push.mean, dropwizard.A_pull.mean))"
+              "target": "alias(asPercent(dropwizard.A_pull.mean, #D), 'A')",
+              "targetFull": "alias(asPercent(dropwizard.A_pull.mean, sumSeries(dropwizard.A_push.mean, dropwizard.A_pull.mean)), 'A')"
             },
             {
               "refId": "K",
-              "target": "asPercent(dropwizard.B_pull.mean, #E)",
-              "targetFull": "asPercent(dropwizard.B_pull.mean, sumSeries(dropwizard.B_push.mean, dropwizard.B_pull.mean))"
+              "target": "alias(asPercent(dropwizard.B_pull.mean, #E), 'B')",
+              "targetFull": "alias(asPercent(dropwizard.B_pull.mean, sumSeries(dropwizard.B_push.mean, dropwizard.B_pull.mean)), 'B')"
             },
             {
               "refId": "L",
-              "target": "asPercent(dropwizard.C_pull.mean, #F)",
-              "targetFull": "asPercent(dropwizard.C_pull.mean, sumSeries(dropwizard.C_push.mean, dropwizard.C_pull.mean))"
+              "target": "alias(asPercent(dropwizard.C_pull.mean, #F), 'C')",
+              "targetFull": "alias(asPercent(dropwizard.C_pull.mean, sumSeries(dropwizard.C_push.mean, dropwizard.C_pull.mean)), 'C')"
             }
           ],
           "thresholds": [],
@@ -546,8 +449,264 @@
     },
     {
       "collapse": false,
-      "height": 250,
-      "panels": [],
+      "height": 112,
+      "panels": [
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": "${DS_LOCAL_GRAPHITE}",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 6,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 4,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "tableColumn": "",
+          "targets": [
+            {
+              "hide": true,
+              "refId": "A",
+              "target": "dropwizard.A_pull.count"
+            },
+            {
+              "hide": true,
+              "refId": "B",
+              "target": "dropwizard.A_push.count"
+            },
+            {
+              "refId": "C",
+              "target": "diffSeries(#A,#B)",
+              "targetFull": "diffSeries(dropwizard.A_pull.count,dropwizard.A_push.count)",
+              "textEditor": true
+            }
+          ],
+          "thresholds": "",
+          "title": "A backpressuring now",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "current"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": "${DS_LOCAL_GRAPHITE}",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 7,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 4,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "tableColumn": "",
+          "targets": [
+            {
+              "hide": true,
+              "refId": "A",
+              "target": "dropwizard.B_pull.count"
+            },
+            {
+              "hide": true,
+              "refId": "B",
+              "target": "dropwizard.B_push.count"
+            },
+            {
+              "refId": "C",
+              "target": "diffSeries(#A,#B)",
+              "targetFull": "diffSeries(dropwizard.B_pull.count,dropwizard.B_push.count)",
+              "textEditor": true
+            }
+          ],
+          "thresholds": "",
+          "title": "B backpressuring now",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "current"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": "${DS_LOCAL_GRAPHITE}",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 8,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 4,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "tableColumn": "",
+          "targets": [
+            {
+              "hide": true,
+              "refId": "A",
+              "target": "dropwizard.C_pull.count"
+            },
+            {
+              "hide": true,
+              "refId": "B",
+              "target": "dropwizard.C_push.count"
+            },
+            {
+              "refId": "C",
+              "target": "diffSeries(#A,#B)",
+              "targetFull": "diffSeries(dropwizard.C_pull.count,dropwizard.C_push.count)",
+              "textEditor": true
+            }
+          ],
+          "thresholds": "",
+          "title": "C backpressuring now",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "current"
+        }
+      ],
       "repeat": null,
       "repeatIteration": null,
       "repeatRowId": null,
@@ -593,5 +752,5 @@
   },
   "timezone": "",
   "title": "streams-monitoring",
-  "version": 2
+  "version": 4
 }
