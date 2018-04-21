@@ -14,6 +14,7 @@ lazy val root = (project in file("."))
       "org.slf4j"         %  "slf4j-api"           % "1.7.16"  % Runtime,
       "ch.qos.logback"    %  "logback-classic"     % "1.1.5"   % Runtime,
       "io.dropwizard.metrics" % "metrics-core"     % dropwizardV,
-      "io.dropwizard.metrics" % "metrics-graphite" % dropwizardV
+      "io.dropwizard.metrics" % "metrics-graphite" % dropwizardV,
+      "org.scalatest" %% "scalatest" % "3.0.5" % Test
     )
   )

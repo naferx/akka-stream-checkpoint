@@ -9,13 +9,27 @@ import com.codahale.metrics.MetricRegistry
 
 import scala.util.control.NonFatal
 
-final case class Checkpoint[T](label: String)(implicit metricRegistry: MetricRegistry) extends GraphStage[FlowShape[T, T]] {
+trait CheckpointRepository {
+  def addPullLatency(nanos: Long): Unit
+  def addPushLatency(nanos: Long): Unit
+}
+
+object DropwizardCheckpointSupport {
+  implicit def withRegistry(implicit metricRegistry: MetricRegistry): String ⇒ CheckpointRepository = name ⇒ new CheckpointRepository {
+    private val pullTimer = metricRegistry.timer(name + "_pull")
+    private val pushTimer = metricRegistry.timer(name + "_push")
+
+    override def addPullLatency(nanos: Long): Unit = pullTimer.update(nanos, TimeUnit.NANOSECONDS)
+    override def addPushLatency(nanos: Long): Unit = pushTimer.update(nanos, TimeUnit.NANOSECONDS)
+  }
+}
+
+final case class Checkpoint[T](name: String)(implicit backendFor: String ⇒ CheckpointRepository) extends GraphStage[FlowShape[T, T]] {
   val in = Inlet[T]("Checkpoint.in")
   val out = Outlet[T]("Checkpoint.out")
   override val shape = FlowShape(in, out)
 
-  private val pullLatency = metricRegistry.timer(label + "_pull")
-  private val pushLatency = metricRegistry.timer(label + "_push")
+  private val backend = backendFor(name)
 
   override def initialAttributes: Attributes = Attributes.name("checkpoint")
 
@@ -33,7 +47,7 @@ final case class Checkpoint[T](label: String)(implicit metricRegistry: MetricReg
           push(out, grab(in))
 
           lastPushed = System.nanoTime()
-          pushLatency.update(lastPushed - lastPulled, TimeUnit.NANOSECONDS)
+          backend.addPushLatency(lastPushed - lastPulled)
         } catch {
           case NonFatal(ex) ⇒ decider(ex) match {
             case Supervision.Stop ⇒ failStage(ex)
@@ -46,7 +60,7 @@ final case class Checkpoint[T](label: String)(implicit metricRegistry: MetricReg
         pull(in)
 
         lastPulled = System.nanoTime()
-        pullLatency.update(lastPulled - lastPushed, TimeUnit.NANOSECONDS)
+        backend.addPullLatency(lastPulled - lastPushed)
       }
 
       setHandlers(in, out, this)

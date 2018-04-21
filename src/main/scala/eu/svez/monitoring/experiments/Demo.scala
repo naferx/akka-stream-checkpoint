@@ -21,23 +21,24 @@ object Demo extends App {
 
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  def ioSimulation(duration: FiniteDuration)(n: Long): Future[Long] =
+  def ioSimulation[T](duration: FiniteDuration)(n: T): Future[T] =
     if (duration == Duration.Zero)
       Future.successful(n)
     else
       after(duration, system.scheduler)(Future.successful(n))
 
-  def slowIOSimulation = ioSimulation(1.second)(_)
-  def fastIOSimulation = ioSimulation(10.millis)(_)
+  def slowIOSimulation[T] = ioSimulation[T](1.second)(_)
+  def fastIOSimulation[T] = ioSimulation[T](10.millis)(_)
 
-  def cpuSimulation(duration: FiniteDuration)(n: Long): Long = {
+  def cpuSimulation[T](duration: FiniteDuration)(n: T): T = {
     val sleepTime = duration.toNanos
     val startTime = System.nanoTime
     while ((System.nanoTime - startTime) < sleepTime) {}
     n
   }
 
-  implicit val metricRegistry: MetricRegistry = new MetricRegistry()
+  import DropwizardCheckpointSupport._
+  implicit val metricRegistry : MetricRegistry  = new MetricRegistry()
 
   GraphiteReporter
     .forRegistry(metricRegistry)
@@ -48,7 +49,7 @@ object Demo extends App {
     .build(new Graphite(new InetSocketAddress("localhost", 2003)))
     .start(1, TimeUnit.SECONDS)
 
-  haltingStream
+  backpressuringAB
 
   // fast - fast: no backpressure
   def noBackpressure: Future[Done] =
@@ -127,7 +128,4 @@ object Demo extends App {
       .via(Checkpoint("C"))
       .runWith(Sink.foreach(println))
 
-
-
 }
-
