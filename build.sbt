@@ -10,6 +10,7 @@ lazy val root = (project in file("."))
     fork in run := true,
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-stream"         % akkaV,
+      "com.typesafe.akka" %% "akka-stream-testkit" % akkaV % Test,
       "com.typesafe.akka" %% "akka-slf4j"          % akkaV,
       "org.slf4j"         %  "slf4j-api"           % "1.7.16"  % Runtime,
       "ch.qos.logback"    %  "logback-classic"     % "1.1.5"   % Runtime,
