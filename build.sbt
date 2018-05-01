@@ -1,4 +1,3 @@
-
 val commonSettings = Seq(
   organization := "com.github.svezfaz",
   description := "Checkpoint stage to monitor Akka Streams streaming applications",
@@ -17,7 +16,30 @@ val commonSettings = Seq(
     "-Ywarn-unused-import",
     "-Ywarn-unused",
     "-Ywarn-nullary-unit"
+  ),
+  scmInfo := Some(
+    ScmInfo(url("https://github.com/svezfaz/akka-stream-checkpoint"),
+      "scm:git:git@github.com:svezfaz/akka-stream-checkpoint.git")
   )
+)
+
+lazy val publishSettings = Seq(
+  homepage := Some(url("https://github.com/svezfaz/akka-stream-checkpoint/")),
+  licenses := Seq("Apache-2.0" → url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  autoAPIMappings := true,
+  publishMavenStyle := true,
+  publishArtifact in Test := false,
+  pomIncludeRepository := { _ ⇒ false },
+  publishTo := sonatypePublishTo.value,
+  pomExtra := (
+    <developers>
+      <developer>
+        <id>svezfaz</id>
+        <name>Stefano Bonetti</name>
+        <url>https://github.com/svezfaz/akka-stream-checkpoint/</url>
+      </developer>
+    </developers>
+    )
 )
 
 lazy val noPublish = Seq(
@@ -27,7 +49,11 @@ lazy val noPublish = Seq(
 )
 
 lazy val root = project.in(file("."))
-  .settings(commonSettings, noPublish)
+  .settings(
+    commonSettings,
+    noPublish,
+    publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
+  )
   .aggregate(core, dropwizard, kamon, benchmarks, docs)
 
 lazy val core = checkpointProject("core", Dependencies.core)
@@ -66,6 +92,6 @@ lazy val docs =
 
 def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
   Project(id = projectId, base = file(projectId))
-    .settings(commonSettings)
+    .settings(commonSettings, publishSettings)
     .settings(name := s"akka-stream-checkpoint-$projectId")
     .settings(additionalSettings: _*)
