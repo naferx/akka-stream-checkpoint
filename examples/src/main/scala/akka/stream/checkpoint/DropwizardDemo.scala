@@ -1,4 +1,4 @@
-package eu.svez.stream.checkpoint
+package akka.stream.checkpoint
 
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
@@ -6,11 +6,11 @@ import java.util.concurrent.TimeUnit
 import akka.actor.ActorSystem
 import akka.pattern.after
 import akka.stream.ActorMaterializer
+import akka.stream.checkpoint.dropwizard.scaladsl._
 import akka.stream.scaladsl.{Sink, Source}
 import akka.{Done, NotUsed}
 import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
 import com.codahale.metrics.{MetricFilter, MetricRegistry}
-import eu.svez.stream.checkpoint.dropwizard.scaladsl._
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}

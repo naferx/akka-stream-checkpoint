@@ -1,14 +1,14 @@
-package eu.svez.stream.checkpoint.benchmarks
+package akka.stream.checkpoint.benchmarks
 
 import java.util.concurrent.TimeUnit
 
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import akka.stream.checkpoint.Checkpoint
+import akka.stream.checkpoint.dropwizard.DropwizardCheckpointRepository
 import akka.stream.scaladsl.{Flow, Keep, RunnableGraph, Sink, Source}
 import com.codahale.metrics.MetricRegistry
-import eu.svez.stream.checkpoint.Checkpoint
-import eu.svez.stream.checkpoint.dropwizard.DropwizardCheckpointRepository
 import org.openjdk.jmh.annotations._
 
 import scala.concurrent._

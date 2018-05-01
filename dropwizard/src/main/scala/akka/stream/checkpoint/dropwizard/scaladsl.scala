@@ -1,8 +1,8 @@
-package eu.svez.stream.checkpoint.dropwizard
+package akka.stream.checkpoint.dropwizard
 
+import akka.stream.checkpoint.Checkpoint
 import akka.stream.scaladsl.{Flow, Source}
 import com.codahale.metrics.MetricRegistry
-import eu.svez.stream.checkpoint.Checkpoint
 
 object scaladsl {
 

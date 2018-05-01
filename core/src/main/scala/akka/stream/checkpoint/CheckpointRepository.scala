@@ -1,4 +1,4 @@
-package eu.svez.stream.checkpoint
+package akka.stream.checkpoint
 
 trait CheckpointRepository {
 

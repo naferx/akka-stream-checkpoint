@@ -1,9 +1,9 @@
-package eu.svez.stream.checkpoint.dropwizard
+package akka.stream.checkpoint.dropwizard
 
 import java.util.concurrent.TimeUnit.NANOSECONDS
 
+import akka.stream.checkpoint.CheckpointRepository
 import com.codahale.metrics.MetricRegistry
-import eu.svez.stream.checkpoint.CheckpointRepository
 
 private[checkpoint] object DropwizardCheckpointRepository {
 

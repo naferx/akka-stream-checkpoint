@@ -1,4 +1,4 @@
-package eu.svez.stream.checkpoint
+package akka.stream.checkpoint
 
 import akka.stream.ActorAttributes.SupervisionStrategy
 import akka.stream._

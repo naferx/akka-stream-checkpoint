@@ -1,4 +1,4 @@
-package eu.svez.stream.checkpoint
+package akka.stream.checkpoint
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
