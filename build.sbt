@@ -23,18 +23,24 @@ val commonSettings = Seq(
 lazy val root = project.in(file("."))
   .settings(commonSettings)
   .settings(publishArtifact := false)
-  .aggregate(benchmarks, core, dropwizard, examples)
-
-lazy val benchmarks = checkpointProject("benchmarks").enablePlugins(JmhPlugin).dependsOn(dropwizard)
+  .aggregate(core, dropwizard, kamon, benchmarks, examples)
 
 lazy val core = checkpointProject("core", Dependencies.core)
 
-lazy val dropwizard = checkpointProject("dropwizard", Dependencies.dropwizard).dependsOn(core)
+lazy val dropwizard = checkpointProject("dropwizard", Dependencies.dropwizard)
+  .dependsOn(core)
+
+lazy val kamon = checkpointProject("kamon", Dependencies.kamon)
+  .dependsOn(core)
+
+lazy val benchmarks = checkpointProject("benchmarks", Seq(publishArtifact := false))
+  .enablePlugins(JmhPlugin)
+  .dependsOn(dropwizard)
 
 lazy val examples = checkpointProject("examples", Dependencies.examples ++ Seq(
     publishArtifact := false
   ))
-  .dependsOn(dropwizard)
+  .dependsOn(dropwizard, kamon)
 
 def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
   Project(id = projectId, base = file(projectId))

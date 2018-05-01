@@ -1,22 +1,18 @@
 package akka.stream.checkpoint
 
-import java.net.InetSocketAddress
-import java.util.concurrent.TimeUnit
-
 import akka.actor.ActorSystem
 import akka.pattern.after
 import akka.stream.ActorMaterializer
-import akka.stream.checkpoint.dropwizard._
 import akka.stream.checkpoint.scaladsl.Implicits._
 import akka.stream.scaladsl.{Sink, Source}
 import akka.{Done, NotUsed}
-import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
-import com.codahale.metrics.{MetricFilter, MetricRegistry}
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-object DropwizardDemo extends App {
+trait CheckpointDemo extends App {
+
+  implicit val repositoryFactory: CheckpointRepositoryFactory
 
   implicit val system: ActorSystem                = ActorSystem("stream-checkpoint-demo")
   implicit val executionContext: ExecutionContext = system.dispatcher
@@ -37,18 +33,6 @@ object DropwizardDemo extends App {
     while ((System.nanoTime - startTime) < sleepTime) {}
     n
   }
-  implicit val metricRegistry : MetricRegistry  = new MetricRegistry()
-
-  GraphiteReporter
-    .forRegistry(metricRegistry)
-    .prefixedWith("dropwizard")
-    .convertRatesTo(TimeUnit.SECONDS)
-    .convertDurationsTo(TimeUnit.MILLISECONDS)
-    .filter(MetricFilter.ALL)
-    .build(new Graphite(new InetSocketAddress("localhost", 2003)))
-    .start(1, TimeUnit.SECONDS)
-
-  backpressuringAB
 
   // fast - fast: no backpressure
   def noBackpressure: Future[Done] =

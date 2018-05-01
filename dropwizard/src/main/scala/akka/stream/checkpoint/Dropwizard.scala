@@ -3,7 +3,7 @@ package akka.stream.checkpoint
 import com.codahale.metrics.MetricRegistry
 import java.util.concurrent.TimeUnit.NANOSECONDS
 
-object dropwizard {
+object Dropwizard {
 
   implicit def factory(implicit metricRegistry: MetricRegistry): CheckpointRepositoryFactory = new CheckpointRepositoryFactory {
     override def createRepository(name: String): CheckpointRepository = forName(name)
