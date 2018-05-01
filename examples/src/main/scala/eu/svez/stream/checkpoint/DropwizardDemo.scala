@@ -1,4 +1,4 @@
-package eu.svez.monitoring.experiments
+package eu.svez.stream.checkpoint
 
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
@@ -8,15 +8,16 @@ import akka.pattern.after
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Sink, Source}
 import akka.{Done, NotUsed}
-import com.codahale.metrics.{MetricFilter, MetricRegistry}
 import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
+import com.codahale.metrics.{MetricFilter, MetricRegistry}
+import eu.svez.stream.checkpoint.dropwizard.scaladsl._
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-object Demo extends App {
+object DropwizardDemo extends App {
 
-  implicit val system: ActorSystem                = ActorSystem("monitoring-stream-demo")
+  implicit val system: ActorSystem                = ActorSystem("stream-checkpoint-demo")
   implicit val executionContext: ExecutionContext = system.dispatcher
 
   implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -36,8 +37,6 @@ object Demo extends App {
     while ((System.nanoTime - startTime) < sleepTime) {}
     n
   }
-
-  import DropwizardCheckpointSupport._
   implicit val metricRegistry : MetricRegistry  = new MetricRegistry()
 
   GraphiteReporter
@@ -54,78 +53,78 @@ object Demo extends App {
   // fast - fast: no backpressure
   def noBackpressure: Future[Done] =
     Source.tick(1.second, 1.second, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .mapAsync(1)(fastIOSimulation)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(fastIOSimulation)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   // slow - fast: backpressuring flow 1
   def backpressuringAB: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(fastIOSimulation)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   // fast - slow: backpressuring flow 2
   def backpressuringBC: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .mapAsync(1)(fastIOSimulation)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   // slow - slow: backpressuring flow 2 and 3
   def backpressuringABC: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   // now A is not backpressuring anymore, as events are being consumed and conflated
   def backpressuringWithConflating: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .conflate(_ + _)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   def backpressuringWithExpanding: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .expand(List(_).iterator)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   def backpressuringWithFiltering: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .filter(_ % 2 != 0)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(slowIOSimulation)
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
   def haltingStream: Future[Done] =
     Source.tick(100.millis, 100.millis, NotUsed).zipWithIndex.map(_._2)
-      .via(Checkpoint("A"))
+      .checkpoint("A")
       .mapAsync(1)(fastIOSimulation)
-      .via(Checkpoint("B"))
+      .checkpoint("B")
       .mapAsync(1)(x ⇒ if (x < 100) fastIOSimulation(x) else ioSimulation(1.hour)(x))
-      .via(Checkpoint("C"))
+      .checkpoint("C")
       .runWith(Sink.foreach(println))
 
 }

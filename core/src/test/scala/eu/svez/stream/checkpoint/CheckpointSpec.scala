@@ -1,4 +1,4 @@
-package eu.svez.monitoring.experiments
+package eu.svez.stream.checkpoint
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
@@ -6,9 +6,9 @@ import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.stream.testkit.scaladsl.TestSink
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.{MustMatchers, WordSpec}
-import scala.concurrent.duration._
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.duration._
 
 class CheckpointSpec extends WordSpec with MustMatchers with ScalaFutures with Eventually {
 

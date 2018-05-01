@@ -1,35 +1,15 @@
-package eu.svez.monitoring.experiments
-
-import java.util.concurrent.TimeUnit
+package eu.svez.stream.checkpoint
 
 import akka.stream.ActorAttributes.SupervisionStrategy
 import akka.stream._
 import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-import com.codahale.metrics.MetricRegistry
 
 import scala.util.control.NonFatal
 
-trait CheckpointRepository {
-  def addPullLatency(nanos: Long): Unit
-  def addPushLatency(nanos: Long): Unit
-}
-
-object DropwizardCheckpointSupport {
-  implicit def withRegistry(implicit metricRegistry: MetricRegistry): String ⇒ CheckpointRepository = name ⇒ new CheckpointRepository {
-    private val pullTimer = metricRegistry.timer(name + "_pull")
-    private val pushTimer = metricRegistry.timer(name + "_push")
-
-    override def addPullLatency(nanos: Long): Unit = pullTimer.update(nanos, TimeUnit.NANOSECONDS)
-    override def addPushLatency(nanos: Long): Unit = pushTimer.update(nanos, TimeUnit.NANOSECONDS)
-  }
-}
-
-final case class Checkpoint[T](name: String)(implicit backendFor: String ⇒ CheckpointRepository) extends GraphStage[FlowShape[T, T]] {
+final case class Checkpoint[T](repository: CheckpointRepository) extends GraphStage[FlowShape[T, T]] {
   val in = Inlet[T]("Checkpoint.in")
   val out = Outlet[T]("Checkpoint.out")
   override val shape = FlowShape(in, out)
-
-  private val backend = backendFor(name)
 
   override def initialAttributes: Attributes = Attributes.name("checkpoint")
 
@@ -47,7 +27,7 @@ final case class Checkpoint[T](name: String)(implicit backendFor: String ⇒ Che
           push(out, grab(in))
 
           lastPushed = System.nanoTime()
-          backend.addPushLatency(lastPushed - lastPulled)
+          repository.addPushLatency(lastPushed - lastPulled)
         } catch {
           case NonFatal(ex) ⇒ decider(ex) match {
             case Supervision.Stop ⇒ failStage(ex)
@@ -60,7 +40,7 @@ final case class Checkpoint[T](name: String)(implicit backendFor: String ⇒ Che
         pull(in)
 
         lastPulled = System.nanoTime()
-        backend.addPullLatency(lastPulled - lastPushed)
+        repository.addPullLatency(lastPulled - lastPushed)
       }
 
       setHandlers(in, out, this)
