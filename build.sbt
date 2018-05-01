@@ -1,16 +1,43 @@
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "akka-stream-monitoring-demo",
-    version := "1.0",
-    scalaVersion := "2.12.4",
-    fork in run := true,
-    libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-stream"     % "2.5.9",
-      "com.typesafe.akka" %% "akka-slf4j"      % "2.5.9",
-      "org.slf4j"         %  "slf4j-api"       % "1.7.16"  % Runtime,
-      "ch.qos.logback"    %  "logback-classic" % "1.1.5"   % Runtime,
-      "io.kamon"          %% "kamon-core"      % "0.6.7",
-      "io.kamon"          %% "kamon-statsd"    % "0.6.7"
-    )
+val commonSettings = Seq(
+  organization := "eu.svez",
+  description := "Checkpoint stage to monitor Akka Streams streaming applications",
+  crossScalaVersions := Seq("2.12.6", "2.11.12"),
+  scalaVersion := crossScalaVersions.value.head,
+  scalacOptions in Compile ++= Seq(
+    "-encoding", "UTF-8",
+    "-target:jvm-1.8",
+    "-feature",
+    "-deprecation",
+    "-unchecked",
+    "-Xlint",
+    "-Xfuture",
+    "-Ywarn-dead-code",
+    "-Ywarn-unused-import",
+    "-Ywarn-unused",
+    "-Ywarn-nullary-unit"
   )
+)
+
+lazy val root = project.in(file("."))
+  .settings(commonSettings)
+  .settings(publishArtifact := false)
+  .aggregate(benchmarks, core, dropwizard, examples)
+
+lazy val benchmarks = checkpointProject("benchmarks").enablePlugins(JmhPlugin).dependsOn(dropwizard)
+
+lazy val core = checkpointProject("core", Dependencies.core)
+
+lazy val dropwizard = checkpointProject("dropwizard", Dependencies.dropwizard).dependsOn(core)
+
+lazy val examples = checkpointProject("examples", Dependencies.examples ++ Seq(
+    publishArtifact := false,
+    scalacOptions in Compile ~= { _ filterNot { o ⇒ o == "-Xfatal-warnings" } }
+  ))
+  .dependsOn(dropwizard)
+
+def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
+  Project(id = projectId, base = file(projectId))
+    .settings(commonSettings)
+    .settings(name := s"akka-stream-checkpoint-$projectId")
+    .settings(additionalSettings: _*)
