@@ -33,13 +33,11 @@ lazy val dropwizard = checkpointProject("dropwizard", Dependencies.dropwizard)
 lazy val kamon = checkpointProject("kamon", Dependencies.kamon)
   .dependsOn(core)
 
-lazy val benchmarks = checkpointProject("benchmarks", Seq(publishArtifact := false))
+lazy val benchmarks = checkpointProject("benchmarks", publishArtifact := false)
   .enablePlugins(JmhPlugin)
   .dependsOn(dropwizard)
 
-lazy val examples = checkpointProject("examples", Dependencies.examples ++ Seq(
-    publishArtifact := false
-  ))
+lazy val examples = checkpointProject("examples", Dependencies.examples, publishArtifact := false)
   .dependsOn(dropwizard, kamon)
 
 def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =

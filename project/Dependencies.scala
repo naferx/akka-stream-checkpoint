@@ -8,15 +8,18 @@ object Dependencies {
   val kamonVersion      = "1.1.0"
   val scalatestVersion  = "3.0.5"
 
+  val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % Test
+
   val core = Seq(libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-stream"         % akkaVersion,
     "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion,
-    "org.scalatest"     %% "scalatest"           % scalatestVersion % Test
+    scalaTest
   ))
 
-  val dropwizard = Seq(libraryDependencies +=
-    "io.dropwizard.metrics" % "metrics-core" % dropwizardVersion
-  )
+  val dropwizard = Seq(libraryDependencies ++= Seq(
+    "io.dropwizard.metrics" % "metrics-core" % dropwizardVersion,
+    scalaTest
+  ))
 
   val kamon = Seq(libraryDependencies +=
     "io.kamon" %% "kamon-core" % kamonVersion
