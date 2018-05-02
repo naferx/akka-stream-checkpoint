@@ -26,8 +26,9 @@ private[checkpoint] final case class CheckpointStage[T](repository: CheckpointRe
         try {
           push(out, grab(in))
 
-          lastPushed = System.nanoTime()
-          repository.addPushLatency(lastPushed - lastPulled)
+          val now = System.nanoTime()
+          repository.markPush(now - lastPulled, BigDecimal(lastPulled - lastPushed) / (now - lastPushed))
+          lastPushed = now
         } catch {
           case NonFatal(ex) ⇒ decider(ex) match {
             case Supervision.Stop ⇒ failStage(ex)
@@ -40,7 +41,7 @@ private[checkpoint] final case class CheckpointStage[T](repository: CheckpointRe
         pull(in)
 
         lastPulled = System.nanoTime()
-        repository.addPullLatency(lastPulled - lastPushed)
+        repository.markPull(lastPulled - lastPushed)
       }
 
       setHandlers(in, out, this)

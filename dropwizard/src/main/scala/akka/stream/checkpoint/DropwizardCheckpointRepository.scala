@@ -1,16 +1,21 @@
 package akka.stream.checkpoint
 
-import java.util.concurrent.TimeUnit.NANOSECONDS
-
 import com.codahale.metrics.MetricRegistry
 
 private[checkpoint] object DropwizardCheckpointRepository {
 
   def apply(name: String)(implicit metricRegistry: MetricRegistry): CheckpointRepository = new CheckpointRepository {
-    private val pullTimer = metricRegistry.timer(name + "_pull")
-    private val pushTimer = metricRegistry.timer(name + "_push")
+    private val pullLatency       = metricRegistry.histogram(name + "_pull_latency")
+    private val pushLatency       = metricRegistry.histogram(name + "_push_latency")
+    private val backpressureRatio = metricRegistry.histogram(name + "_backpressure_ratio")
+    private val throughput        = metricRegistry.meter(name + "_throughput")
 
-    override def addPullLatency(nanos: Long): Unit = pullTimer.update(nanos, NANOSECONDS)
-    override def addPushLatency(nanos: Long): Unit = pushTimer.update(nanos, NANOSECONDS)
+    override def markPull(nanos: Long): Unit = pullLatency.update(nanos)
+
+    override def markPush(nanos: Long, ratio: BigDecimal): Unit = {
+      pushLatency.update(nanos)
+      backpressureRatio.update((ratio * 100).longValue)
+      throughput.mark()
+    }
   }
 }
