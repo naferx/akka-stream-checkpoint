@@ -6,7 +6,7 @@ import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
 
 import scala.util.control.NonFatal
 
-final case class Checkpoint[T](repository: CheckpointRepository) extends GraphStage[FlowShape[T, T]] {
+private[checkpoint] final case class CheckpointStage[T](repository: CheckpointRepository) extends GraphStage[FlowShape[T, T]] {
   val in = Inlet[T]("Checkpoint.in")
   val out = Outlet[T]("Checkpoint.out")
   override val shape = FlowShape(in, out)

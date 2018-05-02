@@ -10,7 +10,7 @@ import org.scalatest.{MustMatchers, WordSpec}
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
 
-class CheckpointSpec extends WordSpec with MustMatchers with ScalaFutures with Eventually {
+class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures with Eventually {
 
   implicit val system = ActorSystem("CheckpointSpec")
   implicit val materializer = ActorMaterializer()
@@ -25,7 +25,7 @@ class CheckpointSpec extends WordSpec with MustMatchers with ScalaFutures with E
 
       val values = 1 to 5
 
-      val results = Source(values).via(Checkpoint("my_checkpoint")).runWith(Sink.seq).futureValue
+      val results = Source(values).via(CheckpointStage("my_checkpoint")).runWith(Sink.seq).futureValue
 
       results must ===(values)
     }
@@ -44,7 +44,7 @@ class CheckpointSpec extends WordSpec with MustMatchers with ScalaFutures with E
 
       val (sourcePromise, probe) =
         Source.maybe[Int]
-          .via(Checkpoint("my_checkpoint"))
+          .via(CheckpointStage("my_checkpoint"))
           .toMat(TestSink.probe[Int])(Keep.both)
           .run()
 

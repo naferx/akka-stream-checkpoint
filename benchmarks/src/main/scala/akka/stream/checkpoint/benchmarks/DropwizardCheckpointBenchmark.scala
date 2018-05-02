@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import akka.stream.checkpoint.Checkpoint
-import akka.stream.checkpoint.dropwizard.DropwizardCheckpointRepository
+import akka.stream.checkpoint.dropwizard
+import akka.stream.checkpoint.scaladsl.Checkpoint
 import akka.stream.scaladsl.{Flow, Keep, RunnableGraph, Sink, Source}
 import com.codahale.metrics.MetricRegistry
 import org.openjdk.jmh.annotations._
@@ -42,7 +42,7 @@ class DropwizardCheckpointBenchmark {
 
     def stage(n: Int) = repositoryType match {
       case "none" ⇒ flow
-      case "sync" ⇒ flow.via(Checkpoint[Int](DropwizardCheckpointRepository(n.toString)))
+      case "sync" ⇒ flow.via(Checkpoint[Int](n.toString)(dropwizard.factory))
     }
 
     val flows = (1 to numberOfFlows).map(stage).reduce(_ via _)

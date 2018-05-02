@@ -6,7 +6,8 @@ import java.util.concurrent.TimeUnit
 import akka.actor.ActorSystem
 import akka.pattern.after
 import akka.stream.ActorMaterializer
-import akka.stream.checkpoint.dropwizard.scaladsl._
+import akka.stream.checkpoint.dropwizard._
+import akka.stream.checkpoint.scaladsl.Implicits._
 import akka.stream.scaladsl.{Sink, Source}
 import akka.{Done, NotUsed}
 import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
@@ -19,8 +20,7 @@ object DropwizardDemo extends App {
 
   implicit val system: ActorSystem                = ActorSystem("stream-checkpoint-demo")
   implicit val executionContext: ExecutionContext = system.dispatcher
-
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
+  implicit val materializer: ActorMaterializer    = ActorMaterializer()
 
   def ioSimulation[T](duration: FiniteDuration)(n: T): Future[T] =
     if (duration == Duration.Zero)
