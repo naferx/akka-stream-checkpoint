@@ -1,6 +1,6 @@
 
 val commonSettings = Seq(
-  organization := "eu.svez",
+  organization := "com.github.svezfaz",
   description := "Checkpoint stage to monitor Akka Streams streaming applications",
   crossScalaVersions := Seq("2.12.6", "2.11.12"),
   scalaVersion := crossScalaVersions.value.head,
@@ -12,6 +12,7 @@ val commonSettings = Seq(
     "-unchecked",
     "-Xlint",
     "-Xfuture",
+    "-Xfatal-warnings",
     "-Ywarn-dead-code",
     "-Ywarn-unused-import",
     "-Ywarn-unused",
@@ -31,8 +32,7 @@ lazy val core = checkpointProject("core", Dependencies.core)
 lazy val dropwizard = checkpointProject("dropwizard", Dependencies.dropwizard).dependsOn(core)
 
 lazy val examples = checkpointProject("examples", Dependencies.examples ++ Seq(
-    publishArtifact := false,
-    scalacOptions in Compile ~= { _ filterNot { o ⇒ o == "-Xfatal-warnings" } }
+    publishArtifact := false
   ))
   .dependsOn(dropwizard)
 
