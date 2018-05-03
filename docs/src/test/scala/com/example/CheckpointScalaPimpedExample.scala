@@ -11,7 +11,7 @@ object CheckpointScalaPimpedExample extends App {
 
   implicit val metricRegistry = new MetricRegistry()
 
-  import akka.stream.checkpoint.Dropwizard._
+  import akka.stream.checkpoint.DropwizardBackend._
   import akka.stream.checkpoint.scaladsl.Implicits._
 
   Source(1 to 100)

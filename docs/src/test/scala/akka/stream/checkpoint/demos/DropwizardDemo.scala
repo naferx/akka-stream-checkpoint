@@ -3,7 +3,7 @@ package akka.stream.checkpoint.demos
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
-import akka.stream.checkpoint.{CheckpointDemo, CheckpointRepositoryFactory, Dropwizard}
+import akka.stream.checkpoint.{CheckpointBackend, CheckpointDemo, DropwizardBackend}
 import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
 import com.codahale.metrics.{MetricFilter, MetricRegistry}
 
@@ -11,7 +11,7 @@ object DropwizardDemo extends CheckpointDemo {
 
   implicit val metricRegistry : MetricRegistry  = new MetricRegistry()
 
-  implicit val repositoryFactory: CheckpointRepositoryFactory = Dropwizard.factory
+  implicit val backend: CheckpointBackend = DropwizardBackend.fromRegistry(metricRegistry)
 
   GraphiteReporter
     .forRegistry(metricRegistry)

@@ -12,7 +12,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait CheckpointDemo extends App {
 
-  implicit val repositoryFactory: CheckpointRepositoryFactory
+  implicit val backend: CheckpointBackend
 
   implicit val system: ActorSystem                = ActorSystem("stream-checkpoint-demo")
   implicit val executionContext: ExecutionContext = system.dispatcher

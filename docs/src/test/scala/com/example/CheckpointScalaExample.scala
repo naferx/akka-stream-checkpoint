@@ -12,7 +12,7 @@ object CheckpointScalaExample extends App {
 
   implicit val metricRegistry = new MetricRegistry()
 
-  import akka.stream.checkpoint.Dropwizard._
+  import akka.stream.checkpoint.DropwizardBackend._
 
   Source(1 to 100)
     .via(Checkpoint("produced"))

@@ -7,7 +7,7 @@ trait CheckpointRepository {
   def addPushLatency(nanos: Long): Unit
 }
 
-trait CheckpointRepositoryFactory {
+trait CheckpointBackend {
 
   def createRepository(name: String): CheckpointRepository
 }

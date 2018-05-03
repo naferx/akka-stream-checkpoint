@@ -1,8 +1,8 @@
 package akka.stream.checkpoint
 
-object Kamon {
+object KamonBackend {
 
-  implicit val factory: CheckpointRepositoryFactory = new CheckpointRepositoryFactory {
+  implicit val instance: CheckpointBackend = new CheckpointBackend {
     override def createRepository(name: String): CheckpointRepository = KamonCheckpointRepository(name)
   }
 }

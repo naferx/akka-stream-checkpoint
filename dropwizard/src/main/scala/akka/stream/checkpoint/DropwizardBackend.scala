@@ -2,9 +2,9 @@ package akka.stream.checkpoint
 
 import com.codahale.metrics.MetricRegistry
 
-object Dropwizard {
+object DropwizardBackend {
 
-  implicit def factory(implicit metricRegistry: MetricRegistry): CheckpointRepositoryFactory = new CheckpointRepositoryFactory {
+  implicit def fromRegistry(implicit metricRegistry: MetricRegistry): CheckpointBackend = new CheckpointBackend {
     override def createRepository(name: String): CheckpointRepository = DropwizardCheckpointRepository(name)
   }
 }
