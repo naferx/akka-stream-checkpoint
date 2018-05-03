@@ -23,7 +23,7 @@ val commonSettings = Seq(
 lazy val root = project.in(file("."))
   .settings(commonSettings)
   .settings(publishArtifact := false)
-  .aggregate(core, dropwizard, kamon, benchmarks, examples)
+  .aggregate(core, dropwizard, kamon, benchmarks, docs)
 
 lazy val core = checkpointProject("core", Dependencies.core)
 
@@ -37,7 +37,26 @@ lazy val benchmarks = checkpointProject("benchmarks", publishArtifact := false)
   .enablePlugins(JmhPlugin)
   .dependsOn(dropwizard)
 
-lazy val examples = checkpointProject("examples", Dependencies.examples, publishArtifact := false)
+lazy val docs =
+  checkpointProject(
+    "docs",
+    publishArtifact := false,
+    paradoxTheme := Some(builtinParadoxTheme("generic")),
+    paradoxNavigationDepth := 3,
+    paradoxProperties ++= Map(
+      "version"                   → version.value,
+      "akkaVersion"               → Dependencies.akkaVersion,
+      "scalaVersion"              → scalaVersion.value,
+      "scalaBinaryVersion"        → scalaBinaryVersion.value,
+      "dropwizardVersion"         → Dependencies.dropwizardVersion,
+      "kamonVersion"              → Dependencies.kamonVersion,
+      "extref.akka-docs.base_url" → s"http://doc.akka.io/docs/akka/${Dependencies.akkaVersion}/%s",
+      "extref.dw-docs.base_url"   → s"http://metrics.dropwizard.io/${Dependencies.dropwizardVersion}/getting-started",
+      "extref.kamon-docs.base_url" → "http://kamon.io/documentation/1.x/get-started"
+    ),
+    Dependencies.examples
+  )
+  .enablePlugins(ParadoxPlugin)
   .dependsOn(dropwizard, kamon)
 
 def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
