@@ -48,15 +48,15 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
           .toMat(TestSink.probe[Int])(Keep.both)
           .run()
 
-      pullLatencies must have size 0
-      pushLatencies must have size 0
+      pullLatencies.size must ===(0)
+      pushLatencies.size must ===(0)
 
       Thread.sleep(pullLatency.toMillis)
       probe.request(1)
 
       eventually {
-        pullLatencies must have size 1
-        pushLatencies must have size 0
+        pullLatencies.size must ===(1)
+        pushLatencies.size must ===(0)
 
         pullLatencies.head must be > pullLatency.toNanos
       }
@@ -65,8 +65,8 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       sourcePromise.success(Some(42))
 
       eventually {
-        pullLatencies must have size 1
-        pushLatencies must have size 1
+        pullLatencies.size must ===(1)
+        pushLatencies.size must ===(1)
 
         pushLatencies.head must be > pushLatency.toNanos
       }
