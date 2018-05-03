@@ -21,9 +21,11 @@ object Dependencies {
     scalaTest
   ))
 
-  val kamon = Seq(libraryDependencies +=
-    "io.kamon" %% "kamon-core" % kamonVersion
-  )
+  val kamon = Seq(libraryDependencies ++= Seq(
+    "io.kamon" %% "kamon-core"    % kamonVersion,
+    "io.kamon" %% "kamon-testkit" % kamonVersion % Test,
+    scalaTest
+  ))
 
   val examples = Seq(libraryDependencies ++= Seq(
     "com.typesafe.akka"     %% "akka-slf4j"       % akkaVersion,
