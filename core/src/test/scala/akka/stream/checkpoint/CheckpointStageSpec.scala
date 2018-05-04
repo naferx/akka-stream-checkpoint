@@ -1,5 +1,7 @@
 package akka.stream.checkpoint
 
+import java.math.MathContext
+
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Keep, Sink, Source}
@@ -18,33 +20,33 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
   "The Checkpoint stage" should {
     "be a pass-through stage" in {
 
-      implicit val noopCheckpoints: String ⇒ CheckpointRepository = _ ⇒ new CheckpointRepository {
-        override def addPushLatency(nanos: Long): Unit = ()
-        override def addPullLatency(nanos: Long): Unit = ()
+      val noopRepo = new CheckpointRepository {
+        override def markPull(latencyNanos: Long): Unit = ()
+        override def markPush(latencyNanos: Long, backpressureRatio: BigDecimal): Unit = ()
       }
 
       val values = 1 to 5
 
-      val results = Source(values).via(CheckpointStage("my_checkpoint")).runWith(Sink.seq).futureValue
+      val results = Source(values).via(CheckpointStage(noopRepo)).runWith(Sink.seq).futureValue
 
       results must ===(values)
     }
 
     "record latencies between pulls and pushes" in {
-      val pullLatency = 100.millis
+      val pullLatency = 400.millis
       val pushLatency = 300.millis
 
       val pushLatencies = ListBuffer.empty[Long]
       val pullLatencies = ListBuffer.empty[Long]
 
-      implicit val arrayBackedCheckpoints: String ⇒ CheckpointRepository = _ ⇒ new CheckpointRepository {
-        override def addPushLatency(nanos: Long): Unit = pushLatencies += nanos
-        override def addPullLatency(nanos: Long): Unit = pullLatencies += nanos
+      val arrayBackedRepo = new CheckpointRepository {
+        override def markPush(nanos: Long, backpressureRatio: BigDecimal): Unit = pushLatencies += nanos
+        override def markPull(nanos: Long): Unit = pullLatencies += nanos
       }
 
       val (sourcePromise, probe) =
         Source.maybe[Int]
-          .via(CheckpointStage("my_checkpoint"))
+          .via(CheckpointStage(arrayBackedRepo))
           .toMat(TestSink.probe[Int])(Keep.both)
           .run()
 
@@ -72,6 +74,35 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       }
 
       probe.expectNext(42)
+    }
+
+    "record backpressure ratios at push time" in {
+      val pullLatency = 100.millis
+      val pushLatency = 900.millis
+
+      val backpressureRatios = ListBuffer.empty[BigDecimal]
+
+      val arrayBackedRepo = new CheckpointRepository {
+        override def markPush(nanos: Long, backpressureRatio: BigDecimal): Unit = backpressureRatios += backpressureRatio
+        override def markPull(nanos: Long): Unit = ()
+      }
+
+      val (sourcePromise, probe) =
+        Source.maybe[Int]
+          .via(CheckpointStage(arrayBackedRepo))
+          .toMat(TestSink.probe[Int])(Keep.both)
+          .run()
+
+      Thread.sleep(pullLatency.toMillis)
+      probe.request(1)
+
+      Thread.sleep(pushLatency.toMillis)
+      sourcePromise.success(Some(42))
+
+      eventually {
+        backpressureRatios.size must ===(1)
+        backpressureRatios.head.rounded(new MathContext(2)) must ===(0.10)
+      }
     }
   }
 

@@ -2,9 +2,9 @@ package akka.stream.checkpoint
 
 trait CheckpointRepository {
 
-  def addPullLatency(nanos: Long): Unit
+  def markPull(latencyNanos: Long): Unit
 
-  def addPushLatency(nanos: Long): Unit
+  def markPush(latencyNanos: Long, backpressureRatio: BigDecimal): Unit
 }
 
 trait CheckpointBackend {

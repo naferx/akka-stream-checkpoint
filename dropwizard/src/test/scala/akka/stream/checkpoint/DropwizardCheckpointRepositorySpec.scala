@@ -12,27 +12,28 @@ class DropwizardCheckpointRepositorySpec extends WordSpec with MustMatchers {
     val registry = new MetricRegistry()
     val repository = DropwizardCheckpointRepository("test")(registry)
 
-    "create two timers for pull and push latencies" in {
-      registry.getTimers must contain key "test_pull"
-      registry.getTimers must contain key "test_push"
-    }
+    "store readings in aptly named metrics" when {
 
-    "store the metrics in aptly named histograms" when {
-
-      "pull latencies are added" in {
+      "elements are pulled into the checkpoint" in {
         val latency = 1.milli.toNanos
-        repository.addPullLatency(latency)
+        repository.markPull(latency)
 
-        registry.timer("test_pull").getCount must ===(1)
-        registry.timer("test_pull").getSnapshot.getValues must ===(Array(latency))
+        registry.histogram("test_pull_latency").getCount must ===(1)
+        registry.histogram("test_pull_latency").getSnapshot.getValues must ===(Array(latency))
       }
 
-      "push latencies are added" in {
+      "elements are pushed through the checkpoint" in {
         val latency = 5.millis.toNanos
-        repository.addPushLatency(latency)
+        val backpressureRatio = 0.93
+        repository.markPush(latency, backpressureRatio)
 
-        registry.timer("test_push").getCount must ===(1)
-        registry.timer("test_push").getSnapshot.getValues must ===(Array(latency))
+        registry.histogram("test_push_latency").getCount must ===(1)
+        registry.histogram("test_push_latency").getSnapshot.getValues must ===(Array(latency))
+
+        registry.histogram("test_backpressure_ratio").getCount must ===(1)
+        registry.histogram("test_backpressure_ratio").getSnapshot.getValues must ===(Array(backpressureRatio * 100))
+
+        registry.meter("test_throughput").getCount must ===(1)
       }
     }
   }

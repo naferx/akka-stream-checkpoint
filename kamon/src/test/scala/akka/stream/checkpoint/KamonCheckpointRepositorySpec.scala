@@ -10,28 +10,31 @@ class KamonCheckpointRepositorySpec extends WordSpec with MustMatchers with Metr
 
     val repository = KamonCheckpointRepository("test")
 
-    "store the metrics in aptly named histograms" when {
+    "store readings in aptly named metrics" when {
 
-      "pull latencies are added" in {
+      "elements are pulled into the checkpoint" in {
         val latency = 42L
-        repository.addPullLatency(latency)
+        repository.markPull(latency)
 
         val distribution = Kamon.histogram("test_pull_latency").distribution()
         distribution.count must ===(1)
         distribution.max   must ===(latency)
-
-        Kamon.counter("test_pull_rate").value().longValue() must ===(1)
       }
 
-      "push latencies are added" in {
+      "elements are pushed through the checkpoint" in {
         val latency = 64L
-        repository.addPushLatency(latency)
+        val backpressureRatio = 0.54
+        repository.markPush(latency, backpressureRatio)
 
-        val distribution = Kamon.histogram("test_push_latency").distribution()
-        distribution.count must ===(1)
-        distribution.max   must ===(latency)
+        val latencyDistro = Kamon.histogram("test_push_latency").distribution()
+        latencyDistro.count must ===(1)
+        latencyDistro.max   must ===(latency)
 
-        Kamon.counter("test_push_rate").value().longValue() must ===(1)
+        val backpressureDistro = Kamon.histogram("test_backpressure_ratio").distribution()
+        backpressureDistro.count must ===(1)
+        backpressureDistro.max   must ===(backpressureRatio * 100)
+
+        Kamon.counter("test_throughput").value().longValue() must ===(1)
       }
     }
   }
