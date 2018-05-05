@@ -20,9 +20,14 @@ val commonSettings = Seq(
   )
 )
 
+lazy val noPublish = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false
+)
+
 lazy val root = project.in(file("."))
-  .settings(commonSettings)
-  .settings(publishArtifact := false)
+  .settings(commonSettings, noPublish)
   .aggregate(core, dropwizard, kamon, benchmarks, docs)
 
 lazy val core = checkpointProject("core", Dependencies.core)
@@ -33,14 +38,14 @@ lazy val dropwizard = checkpointProject("dropwizard", Dependencies.dropwizard)
 lazy val kamon = checkpointProject("kamon", Dependencies.kamon)
   .dependsOn(core)
 
-lazy val benchmarks = checkpointProject("benchmarks", publishArtifact := false)
+lazy val benchmarks = checkpointProject("benchmarks", noPublish)
   .enablePlugins(JmhPlugin)
   .dependsOn(dropwizard)
 
 lazy val docs =
   checkpointProject(
     "docs",
-    publishArtifact := false,
+    noPublish,
     paradoxTheme := Some(builtinParadoxTheme("generic")),
     paradoxNavigationDepth := 3,
     paradoxProperties ++= Map(
@@ -54,7 +59,7 @@ lazy val docs =
       "extref.dw-docs.base_url"   → s"http://metrics.dropwizard.io/${Dependencies.dropwizardVersion}/getting-started",
       "extref.kamon-docs.base_url" → "http://kamon.io/documentation/1.x/get-started"
     ),
-    Dependencies.examples
+    Dependencies.docs
   )
   .enablePlugins(ParadoxPlugin)
   .dependsOn(dropwizard, kamon)
