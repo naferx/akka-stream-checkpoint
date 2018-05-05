@@ -12,7 +12,7 @@ object Dependencies {
 
   val core = Seq(libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-stream"         % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion,
+    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
     scalaTest
   ))
 
