@@ -1,7 +1,5 @@
 package akka.stream.checkpoint
 
-import java.math.MathContext
-
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Keep, Sink, Source}
@@ -80,6 +78,9 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       val pullLatency = 100.millis
       val pushLatency = 900.millis
 
+      val expectedRatio = BigDecimal(0.1)
+      val tolerance     = 0.01
+
       val backpressureRatios = ListBuffer.empty[BigDecimal]
 
       val arrayBackedRepo = new CheckpointRepository {
@@ -101,7 +102,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
 
       eventually {
         backpressureRatios.size must ===(1)
-        backpressureRatios.head.rounded(new MathContext(2)) must ===(0.10)
+        backpressureRatios.head must ===(expectedRatio +- tolerance)
       }
     }
   }
