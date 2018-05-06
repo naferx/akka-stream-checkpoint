@@ -34,6 +34,8 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       val pullLatency = 400.millis
       val pushLatency = 300.millis
 
+      val tolerance = 50.millis
+
       val pushLatencies = ListBuffer.empty[Long]
       val pullLatencies = ListBuffer.empty[Long]
 
@@ -58,7 +60,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
         pullLatencies.size must ===(1)
         pushLatencies.size must ===(0)
 
-        pullLatencies.head must be > pullLatency.toNanos
+        pullLatencies.head must ===(pullLatency.toNanos +- tolerance.toNanos)
       }
 
       Thread.sleep(pushLatency.toMillis)
@@ -68,7 +70,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
         pullLatencies.size must ===(1)
         pushLatencies.size must ===(1)
 
-        pushLatencies.head must be > pushLatency.toNanos
+        pushLatencies.head must ===(pushLatency.toNanos +- tolerance.toNanos)
       }
 
       probe.expectNext(42)
