@@ -6,7 +6,5 @@
 [travis]:                https://travis-ci.org/svezfaz/akka-stream-checkpoint
 [travis-badge]:          https://travis-ci.org/svezfaz/akka-stream-checkpoint.svg?branch=master
 
-[![Build Status](https://travis-ci.org/svezfaz/akka-stream-checkpoint.svg?branch=master)]()
-
 Checkpoint stage to monitor [Akka Streams](http://doc.akka.io/docs/akka/current/scala/stream/index.html) streaming applications.
 
