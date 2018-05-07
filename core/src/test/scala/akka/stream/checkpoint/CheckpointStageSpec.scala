@@ -1,7 +1,7 @@
 package akka.stream.checkpoint
 
 import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, OverflowStrategy}
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.stream.testkit.scaladsl.TestSink
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
@@ -14,7 +14,6 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
 
   implicit val system = ActorSystem("CheckpointSpec")
   implicit val materializer = ActorMaterializer()
-  implicit val ctx = system.dispatcher
 
   "The Checkpoint stage" should {
     "be a pass-through stage" in {
@@ -37,45 +36,44 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
 
       val tolerance = 50.millis
 
-      var lastPushLatency: Long = 0L
-      var lastPullLatency: Long = 0L
+      val pushLatencies = ListBuffer.empty[Long]
+      val pullLatencies = ListBuffer.empty[Long]
 
       val arrayBackedRepo = new CheckpointRepository {
-        override def markPush(nanos: Long, backpressureRatio: BigDecimal): Unit = lastPushLatency = nanos
-        override def markPull(nanos: Long): Unit = lastPullLatency = nanos
+        override def markPush(nanos: Long, backpressureRatio: BigDecimal): Unit = pushLatencies += nanos
+        override def markPull(nanos: Long): Unit = pullLatencies += nanos
       }
 
-      val (queue, probe) =
-        Source.queue[String](1, OverflowStrategy.fail)
+      val (sourcePromise, probe) =
+        Source.maybe[Int]
           .via(CheckpointStage(arrayBackedRepo))
-          .toMat(TestSink.probe[String])(Keep.both)
+          .toMat(TestSink.probe[Int])(Keep.both)
           .run()
 
-      // warmup
-      probe.request(1)
-      queue.offer("first").futureValue
-      probe.expectNext("first")
+      pullLatencies.size must ===(0)
+      pushLatencies.size must ===(0)
 
-      // test
       Thread.sleep(pullLatency.toMillis)
       probe.request(1)
 
       eventually {
-        lastPullLatency must ===(pullLatency.toNanos +- tolerance.toNanos)
+        pullLatencies.size must ===(1)
+        pushLatencies.size must ===(0)
+
+        pullLatencies.head must ===(pullLatency.toNanos +- tolerance.toNanos)
       }
 
       Thread.sleep(pushLatency.toMillis)
-      queue.offer("second").futureValue
+      sourcePromise.success(Some(42))
 
       eventually {
-        lastPushLatency must ===(pushLatency.toNanos +- tolerance.toNanos)
+        pullLatencies.size must ===(1)
+        pushLatencies.size must ===(1)
+
+        pushLatencies.head must ===(pushLatency.toNanos +- tolerance.toNanos)
       }
 
-      probe.expectNext("second")
-      queue.complete()
-
-      println(lastPullLatency)
-      println(lastPushLatency)
+      probe.expectNext(42)
     }
 
     "record backpressure ratios at push time" in {
