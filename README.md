@@ -1,4 +1,5 @@
 [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![travis-badge][]][travis]
+
 [scaladex]:              https://index.scala-lang.org/svezfaz/akka-stream-checkpoint
 [scaladex-badge]:        https://index.scala-lang.org/svezfaz/akka-stream-checkpoint/latest.svg
 [maven-central]:         https://search.maven.org/search?q=akka-stream-checkpoint
