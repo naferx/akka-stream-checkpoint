@@ -67,7 +67,7 @@ lazy val kamon = checkpointProject("kamon", Dependencies.kamon)
 
 lazy val benchmarks = checkpointProject("benchmarks", noPublish)
   .enablePlugins(JmhPlugin)
-  .dependsOn(dropwizard)
+  .dependsOn(dropwizard, kamon)
 
 lazy val docs =
   checkpointProject(

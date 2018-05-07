@@ -14,6 +14,18 @@ import org.openjdk.jmh.annotations._
 import scala.concurrent._
 import scala.concurrent.duration._
 
+/*
+[info] Benchmark                                                         (numberOfFlows)  (repositoryType)   Mode  Cnt     Score     Error   Units
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements                1              none  thrpt   20  9181.100 ± 196.352  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements                1              sync  thrpt   20   643.488 ±  99.825  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements                1             async  thrpt   20   228.949 ±  17.520  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements                5              none  thrpt   20  2831.076 ± 107.756  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements                5              sync  thrpt   20   134.821 ±   9.241  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements                5             async  thrpt   20   189.149 ±  17.454  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements               20              none  thrpt   20   797.517 ±  27.768  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements               20              sync  thrpt   20    33.547 ±   0.663  ops/ms
+[info] DropwizardCheckpointBenchmark.map_with_checkpoints_100k_elements               20             async  thrpt   20    51.590 ±   5.496  ops/ms
+ */
 @State(Scope.Benchmark)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode(Array(Mode.Throughput))
@@ -27,10 +39,10 @@ class DropwizardCheckpointBenchmark {
 
   val numberOfElements = 100000
 
-  @Param(Array("1", "5"))
+  @Param(Array("1", "5", "20"))
   var numberOfFlows = 1
 
-  @Param(Array("none", "sync"))
+  @Param(Array("none", "sync", "async"))
   var repositoryType = "none"
 
   var graph: RunnableGraph[Future[Done]] = _
@@ -41,8 +53,9 @@ class DropwizardCheckpointBenchmark {
     val flow = Flow[Int].map(_ + 1)
 
     def stage(n: Int) = repositoryType match {
-      case "none" ⇒ flow
+      case "none" ⇒ flow.via(Flow.fromFunction(identity))
       case "sync" ⇒ flow.via(Checkpoint[Int](n.toString))
+      case "async" ⇒ flow.via(Checkpoint[Int](n.toString)).async
     }
 
     val flows = (1 to numberOfFlows).map(stage).reduce(_ via _)
