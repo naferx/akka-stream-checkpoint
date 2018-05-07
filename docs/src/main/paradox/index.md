@@ -1,10 +1,23 @@
 # Akka Streams Checkpoint
 
-Checkpoint stage to monitor Akka Streams streaming applications. Presently supports pluggable backends for
-- [Dropwizard](http://metrics.dropwizard.io)
-- [Kamon](https://kamon.io)
+Checkpoint stage to monitor Akka Streams streaming applications. It provides means to create pass-through flows of type
+`Flow[T, T, NotUsed]`, aka *Checkpoints*, to instrument your application with. This will give you a pulse on different
+metrics at different points of your pipeline, such as throughput and backpressure.
 
-This library is currently available for Scala 2.11 and 2.12.
+`akka-stream-checkpoint` presently supports pluggable backends for
+
+* [Dropwizard](http://metrics.dropwizard.io)
+* [Kamon](https://kamon.io)
+
+It can also be used with your own [custom backend](backends.md), should you want to write your own.
+
+This library is currently available for Scala 2.11 and 2.12, and it uses:
+
+* @extref[Akka Streams](akka-docs:scala/stream/index.html) $akkaVersion$ ([Github](https://github.com/akka/akka))
+* @extref[Dropwizard](dw-docs:) $dropwizardVersion$ ([Github](https://github.com/dropwizard/metrics))
+* @extref[Kamon](kamon-docs:/get-started) $kamonVersion$ ([Github](https://github.com/kamon-io/Kamon))
+
+Akka Streams Checkpoint source code is available on [Github](https://github.com/svezfaz/akka-stream-checkpoint).
 
 ## Modules
 
@@ -38,7 +51,7 @@ Gradle
     ```
     @@@
 
-### Dropwizard
+### Dropwizard backend
 This module provides support to back your checkpoints with [Dropwizard](http://metrics.dropwizard.io) metrics.
 
 sbt
@@ -68,7 +81,7 @@ Gradle
     ```
     @@@
     
-### Kamon
+### Kamon backend
 This module provides support to back your checkpoints with [Kamon](https://kamon.io) metrics.
 
 sbt
@@ -98,12 +111,19 @@ Gradle
     ```
     @@@
     
-    
-## Examples
+## scaladsl and javadsl
 
-The examples in this documentation use
+There are two separate packages named `akka.stream.checkpoint.scaladsl` and `akka.stream.checkpoint.javadsl` 
+with the API for Scala and Java. These packages contain a `Checkpoint` class with factory methods to create a 
+checkpoint given a name (label) and a backend. See the [examples](examples.md) section for more information.
 
-* Scala $scalaBinaryVersion$
-* @extref[Akka Streams](akka-docs:scala/stream/index.html) $akkaVersion$ ([Github](https://github.com/akka/akka))
-* @extref[Dropwizard](dw-docs:) $dropwizardVersion$ ([Github](https://github.com/dropwizard/metrics))
-* @extref[Kamon](kamon-docs:) $kamonVersion$ ([Github](https://github.com/kamon-io/Kamon))
+@@ toc { .main depth=3 }
+
+@@@ index
+
+* [Motivation](motivation.md)
+* [Backends](backends.md)
+* [Examples](examples.md)
+* [Demo](demo.md)
+
+@@@

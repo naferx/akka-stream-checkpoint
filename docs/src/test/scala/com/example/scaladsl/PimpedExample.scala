@@ -1,16 +1,17 @@
-package com.example
+package com.example.scaladsl
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import com.codahale.metrics.MetricRegistry
 
-object CheckpointScalaPimpedExample extends App {
+object PimpedExample extends App {
   implicit val system       = ActorSystem.create("stream-checkpoint-java-demo")
   implicit val materializer = ActorMaterializer.create(system)
 
   implicit val metricRegistry = new MetricRegistry()
 
+  // #pimped
   import akka.stream.checkpoint.DropwizardBackend._
   import akka.stream.checkpoint.scaladsl.Implicits._
 
@@ -19,4 +20,5 @@ object CheckpointScalaPimpedExample extends App {
     .filter((x: Int) ⇒ x % 2 == 0)
     .checkpoint("filtered")
     .runForeach(println)
+  // #pimped
 }

@@ -84,13 +84,13 @@ lazy val docs =
       "kamonVersion"              → Dependencies.kamonVersion,
       "extref.akka-docs.base_url" → s"http://doc.akka.io/docs/akka/${Dependencies.akkaVersion}/%s",
       "extref.dw-docs.base_url"   → s"http://metrics.dropwizard.io/${Dependencies.dropwizardVersion}/getting-started",
-      "extref.kamon-docs.base_url" → "http://kamon.io/documentation/1.x/get-started"
+      "extref.kamon-docs.base_url" → "http://kamon.io/documentation/1.x"
     ),
     sourceDirectory in Paradox := sourceDirectory.value / "main" / "paradox",
     git.remoteRepo := "git@github.com:svezfaz/akka-stream-checkpoint.git",
     Dependencies.docs
   )
-  .enablePlugins(ParadoxPlugin, ParadoxSitePlugin, SiteScaladocPlugin, GhpagesPlugin)
+  .enablePlugins(ParadoxPlugin, ParadoxSitePlugin, GhpagesPlugin)
   .dependsOn(dropwizard, kamon)
 
 def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =

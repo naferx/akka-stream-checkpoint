@@ -1,9 +1,9 @@
-package akka.stream.checkpoint.demos
+package com.example.demo
 
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
-import akka.stream.checkpoint.{CheckpointBackend, CheckpointDemo, DropwizardBackend}
+import akka.stream.checkpoint.{CheckpointBackend, DropwizardBackend}
 import com.codahale.metrics.graphite.{Graphite, GraphiteReporter}
 import com.codahale.metrics.{MetricFilter, MetricRegistry}
 

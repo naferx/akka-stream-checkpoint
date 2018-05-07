@@ -1,8 +1,9 @@
-package akka.stream.checkpoint
+package com.example.demo
 
 import akka.actor.ActorSystem
 import akka.pattern.after
 import akka.stream.ActorMaterializer
+import akka.stream.checkpoint.CheckpointBackend
 import akka.stream.checkpoint.scaladsl.Implicits._
 import akka.stream.scaladsl.{Sink, Source}
 import akka.{Done, NotUsed}
