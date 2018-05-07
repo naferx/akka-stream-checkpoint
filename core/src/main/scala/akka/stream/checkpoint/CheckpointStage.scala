@@ -1,10 +1,7 @@
 package akka.stream.checkpoint
 
-import akka.stream.ActorAttributes.SupervisionStrategy
 import akka.stream._
 import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-
-import scala.util.control.NonFatal
 
 private[checkpoint] final case class CheckpointStage[T](repository: CheckpointRepository) extends GraphStage[FlowShape[T, T]] {
   val in = Inlet[T]("Checkpoint.in")
@@ -16,25 +13,20 @@ private[checkpoint] final case class CheckpointStage[T](repository: CheckpointRe
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with InHandler with OutHandler {
 
-      var lastPulled: Long = System.nanoTime()
-      var lastPushed: Long = lastPulled
+      var lastPulled: Long = 0L
+      var lastPushed: Long = 0L
 
-      private def decider =
-        inheritedAttributes.get[SupervisionStrategy].map(_.decider).getOrElse(Supervision.stoppingDecider)
+      override def preStart(): Unit = {
+        lastPulled = System.nanoTime()
+        lastPushed = lastPulled
+      }
 
       override def onPush(): Unit = {
-        try {
-          push(out, grab(in))
+        push(out, grab(in))
 
-          val now = System.nanoTime()
-          repository.markPush(now - lastPulled, (lastPulled - lastPushed) * 100 / (now - lastPushed))
-          lastPushed = now
-        } catch {
-          case NonFatal(ex) ⇒ decider(ex) match {
-            case Supervision.Stop ⇒ failStage(ex)
-            case _                ⇒ pull(in)
-          }
-        }
+        val now = System.nanoTime()
+        repository.markPush(now - lastPulled, (lastPulled - lastPushed) * 100 / (now - lastPushed))
+        lastPushed = now
       }
 
       override def onPull(): Unit = {

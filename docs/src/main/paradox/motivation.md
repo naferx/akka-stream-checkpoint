@@ -14,7 +14,7 @@ TODO
 ## What this library does
 
 ### Throughput
-TODO
+Throughput is the measurement of how many events are processed by your pipeline in a unit of time.
 
 ### Backpressure
 TODO
