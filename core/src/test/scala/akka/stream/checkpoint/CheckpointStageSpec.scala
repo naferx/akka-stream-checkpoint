@@ -34,7 +34,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       val pullLatency = 400.millis
       val pushLatency = 300.millis
 
-      val tolerance = 50.millis
+      val tolerance = 100.millis
 
       val pushLatencies = ListBuffer.empty[Long]
       val pullLatencies = ListBuffer.empty[Long]
