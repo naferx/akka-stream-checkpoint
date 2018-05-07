@@ -1,3 +1,4 @@
+
 val commonSettings = Seq(
   organization := "com.github.svezfaz",
   description := "Checkpoint stage to monitor Akka Streams streaming applications",
@@ -85,9 +86,11 @@ lazy val docs =
       "extref.dw-docs.base_url"   → s"http://metrics.dropwizard.io/${Dependencies.dropwizardVersion}/getting-started",
       "extref.kamon-docs.base_url" → "http://kamon.io/documentation/1.x/get-started"
     ),
+    sourceDirectory in Paradox := sourceDirectory.value / "main" / "paradox",
+    git.remoteRepo := "git@github.com:svezfaz/akka-stream-checkpoint.git",
     Dependencies.docs
   )
-  .enablePlugins(ParadoxPlugin)
+  .enablePlugins(ParadoxPlugin, ParadoxSitePlugin, SiteScaladocPlugin, GhpagesPlugin)
   .dependsOn(dropwizard, kamon)
 
 def checkpointProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
