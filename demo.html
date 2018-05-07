@@ -102,14 +102,22 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#demo" name="demo" class="anchor"><span class="anchor-link"></span></a>Demo</h1>
-<p>TODO detail how to run the demo on both Dropwizard AND Kamon</p>
 <h2><a href="#setup-grafana" name="setup-grafana" class="anchor"><span class="anchor-link"></span></a>Setup Grafana</h2>
+<p>The demo needs a metrics server and a Grafana dashboard to connect to. The <a href="https://hub.docker.com/r/kamon/grafana_graphite/">Grafana/Graphite</a> Docker image will give you everything you need. </p>
 <pre><code>docker run -d -p 80:80 -p 81:81 -p 8125:8125/udp -p 8126:8126 -p 2003:2003 --name kamon-grafana-dashboard kamon/grafana_graphite
 </code></pre>
-<p>The import the JSON-encoded Grafana dashboard you find in examples/grafana. More info <a href="https://hub.docker.com/r/kamon/grafana_graphite/">here</a>.</p>
+<p>Once Grafana is up, navigate to <code>localhost:80</code>, login with credentials <em>admin:admin</em> and import the JSON-encoded Grafana dashboard you find in <code>docs/test/resources/grafana</code>.</p>
 <h2><a href="#run-it" name="run-it" class="anchor"><span class="anchor-link"></span></a>Run it</h2>
-<pre><code>sbt docs/run
-</code></pre>
+<dl>
+  <dt>Dropwizard</dt>
+  <dd>
+  <pre><code>sbt &quot;docs/test:runMain com.example.demo.DropwizardDemo&quot;
+</code></pre></dd>
+  <dt>Kamon</dt>
+  <dd>
+  <pre><code>sbt &quot;docs/test:runMain com.example.demo.KamonDemo&quot;
+</code></pre></dd>
+</dl>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/svezfaz/akka-stream-checkpoint/tree/master/docs/src/main/paradox/demo.md">here</a>.
 </div>
