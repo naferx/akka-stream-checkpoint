@@ -6,6 +6,15 @@ import akka.stream.scaladsl.{Flow, Source}
 
 object Checkpoint {
 
+  /**
+    * Scala API
+    * Creates a checkpoint Flow.
+    *
+    * @param name checkpoint identification label
+    * @param backend backend to store the checkpoint readings
+    * @tparam T pass-through type of the elements that will flow through the checkpoint
+    * @return a newly created checkpoint Flow
+    */
   def apply[T](name: String)(implicit backend: CheckpointBackend): Flow[T, T, NotUsed] =
     Flow.fromGraph(CheckpointStage[T](repository = backend.createRepository(name)))
 }

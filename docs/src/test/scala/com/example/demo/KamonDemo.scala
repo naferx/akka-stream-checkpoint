@@ -1,6 +1,6 @@
-package akka.stream.checkpoint.demos
+package com.example.demo
 
-import akka.stream.checkpoint.{CheckpointBackend, CheckpointDemo, KamonBackend}
+import akka.stream.checkpoint.{CheckpointBackend, KamonBackend}
 
 object KamonDemo extends CheckpointDemo {
 
