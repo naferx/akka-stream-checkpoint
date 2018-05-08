@@ -9,7 +9,7 @@ metrics at different points of your pipeline, such as throughput and backpressur
 * [Dropwizard](http://metrics.dropwizard.io)
 * [Kamon](https://kamon.io)
 
-It can also be used with your own [custom backend](backends.md), should you want to write your own.
+It can also be used with your own @ref:[custom backend](backends.md), should you want to write your own.
 
 This library is currently available for Scala 2.11 and 2.12, and it uses:
 

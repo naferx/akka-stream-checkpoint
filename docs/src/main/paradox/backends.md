@@ -21,4 +21,10 @@ with the checkpoint label you specify.
 
 ## Custom
 
-TODO
+Custom backends can be created by implementing `CheckpointBackend` and `CheckpointRepository` interfaces.
+
+Scala
+: @@ snip [dummy](../../test/scala/com/example/scaladsl/CustomBackendExample.scala) { #custom }
+
+Java
+: @@ snip [dummy](../../test/java/com/example/javadsl/CustomBackendExample.java) { #custom }
