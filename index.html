@@ -30,14 +30,14 @@
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.1
+0.0.2*
 </div>
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a></li>
+  <li><a href="introduction.html" class="page">Introduction</a></li>
+  <li><a href="gettingStarted.html" class="page">Getting started</a></li>
   <li><a href="backends.html" class="page">Backends</a></li>
-  <li><a href="examples.html" class="page">Examples</a></li>
   <li><a href="demo.html" class="page">Demo</a></li>
 </ul>
 </div>
@@ -70,14 +70,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.1
+0.0.2*
 </div>
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a></li>
+  <li><a href="introduction.html" class="page">Introduction</a></li>
+  <li><a href="gettingStarted.html" class="page">Getting started</a></li>
   <li><a href="backends.html" class="page">Backends</a></li>
-  <li><a href="examples.html" class="page">Examples</a></li>
   <li><a href="demo.html" class="page">Demo</a></li>
 </ul>
 </div>
@@ -102,96 +102,46 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="http://metrics.dropwizard.io">Dropwizard</a></li>
   <li><a href="https://kamon.io">Kamon</a></li>
 </ul>
-<p>It can also be used with your own <a href="backends.md">custom backend</a>, should you want to write your own.</p>
+<p>It can also be used with your own <a href="backends.html">custom backend</a>, should you want to write your own.</p>
 <p>This library is currently available for Scala 2.11 and 2.12, and it uses:</p>
 <ul>
   <li><a href="http://doc.akka.io/docs/akka/2.5.12/scala/stream/index.html">Akka Streams</a> 2.5.12 (<a href="https://github.com/akka/akka">Github</a>)</li>
   <li><a href="http://metrics.dropwizard.io/4.0.2/getting-started">Dropwizard</a> 4.0.2 (<a href="https://github.com/dropwizard/metrics">Github</a>)</li>
   <li><a href="http://kamon.io/documentation/1.x">Kamon</a> 1.1.0 (<a href="https://github.com/kamon-io/Kamon">Github</a>)</li>
 </ul>
-<h2><a href="#modules" name="modules" class="anchor"><span class="anchor-link"></span></a>Modules</h2>
-<h3><a href="#core" name="core" class="anchor"><span class="anchor-link"></span></a>Core</h3>
-<p>The core module includes the DSLs that allow you to create the checkpoint stages to instrument your Akka Streams pipeline.</p>
-<dl>
-  <dt>sbt</dt>
-  <dd>
-  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-core&quot; % &quot;0.0.1&quot;
-</code></pre></dd>
-  <dt>Maven</dt>
-  <dd>
-  <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
-  &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
-  &lt;artifactId&gt;akka-stream-checkpoint-core_2.12&lt;/artifactId&gt;
-  &lt;version&gt;0.0.1&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre></dd>
-  <dt>Gradle</dt>
-  <dd>
-  <pre><code>dependencies {
-  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-core_2.12&quot;, version: &quot;0.0.1&quot;
-}
-</code></pre></dd>
-</dl>
-<h3><a href="#dropwizard-backend" name="dropwizard-backend" class="anchor"><span class="anchor-link"></span></a>Dropwizard backend</h3>
-<p>This module provides support to back your checkpoints with <a href="http://metrics.dropwizard.io">Dropwizard</a> metrics.</p>
-<dl>
-  <dt>sbt</dt>
-  <dd>
-  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-dropwizard&quot; % &quot;0.0.1&quot;
-</code></pre></dd>
-  <dt>Maven</dt>
-  <dd>
-  <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
-  &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
-  &lt;artifactId&gt;akka-stream-checkpoint-dropwizard_2.12&lt;/artifactId&gt;
-  &lt;version&gt;0.0.1&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre></dd>
-  <dt>Gradle</dt>
-  <dd>
-  <pre><code>dependencies {
-  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-dropwizard_2.12&quot;, version: &quot;0.0.1&quot;
-}
-</code></pre></dd>
-</dl>
-<h3><a href="#kamon-backend" name="kamon-backend" class="anchor"><span class="anchor-link"></span></a>Kamon backend</h3>
-<p>This module provides support to back your checkpoints with <a href="https://kamon.io">Kamon</a> metrics.</p>
-<dl>
-  <dt>sbt</dt>
-  <dd>
-  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-kamon&quot; % &quot;0.0.1&quot;
-</code></pre></dd>
-  <dt>Maven</dt>
-  <dd>
-  <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
-  &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
-  &lt;artifactId&gt;akka-stream-checkpoint-kamon_2.12&lt;/artifactId&gt;
-  &lt;version&gt;0.0.1&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre></dd>
-  <dt>Gradle</dt>
-  <dd>
-  <pre><code>dependencies {
-  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-kamon_2.12&quot;, version: &quot;0.0.1&quot;
-}
-</code></pre></dd>
-</dl>
-<h2><a href="#scaladsl-and-javadsl" name="scaladsl-and-javadsl" class="anchor"><span class="anchor-link"></span></a>scaladsl and javadsl</h2>
-<p>There are two separate packages named <code>akka.stream.checkpoint.scaladsl</code> and <code>akka.stream.checkpoint.javadsl</code> with the API for Scala and Java. These packages contain a <code>Checkpoint</code> class with factory methods to create a checkpoint given a name (label) and a backend. See the <a href="examples.md">examples</a> section for more information.</p>
+<p>Akka Streams Checkpoint source code is available on <a href="https://github.com/svezfaz/akka-stream-checkpoint">Github</a>.</p>
 <div class="toc main">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a>
+  <li><a href="introduction.html" class="page">Introduction</a>
   <ul>
-    <li><a href="motivation.html#what-this-library-does" class="header">What this library does</a>
+    <li><a href="introduction.html#motivation" class="header">Motivation</a></li>
+    <li><a href="introduction.html#what-this-library-does" class="header">What this library does</a>
     <ul>
-      <li><a href="motivation.html#throughput" class="header">Throughput</a></li>
-      <li><a href="motivation.html#backpressure" class="header">Backpressure</a></li>
-      <li><a href="motivation.html#liveness" class="header">Liveness</a></li>
+      <li><a href="introduction.html#throughput" class="header">Throughput</a></li>
+      <li><a href="introduction.html#pull-push-and-push-pull-latency" class="header">Pull-push and push-pull latency</a></li>
+      <li><a href="introduction.html#backpressure-ratio" class="header">Backpressure ratio</a></li>
+      <li><a href="introduction.html#liveness" class="header">Liveness</a></li>
     </ul></li>
-    <li><a href="motivation.html#what-this-library-does-not" class="header">What this library does NOT</a>
+    <li><a href="introduction.html#what-this-library-does-not" class="header">What this library does NOT</a>
     <ul>
-      <li><a href="motivation.html#error-tracking" class="header"> Error tracking</a></li>
-      <li><a href="motivation.html#trace-context" class="header">Trace context</a></li>
+      <li><a href="introduction.html#error-tracking" class="header"> Error tracking</a></li>
+      <li><a href="introduction.html#trace-context" class="header">Trace context</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a href="gettingStarted.html" class="page">Getting started</a>
+  <ul>
+    <li><a href="gettingStarted.html#dependencies" class="header">Dependencies</a>
+    <ul>
+      <li><a href="gettingStarted.html#core" class="header">Core</a></li>
+      <li><a href="gettingStarted.html#dropwizard-backend" class="header">Dropwizard backend</a></li>
+      <li><a href="gettingStarted.html#kamon-backend" class="header">Kamon backend</a></li>
+    </ul></li>
+    <li><a href="gettingStarted.html#scaladsl-and-javadsl" class="header">scaladsl and javadsl</a></li>
+    <li><a href="gettingStarted.html#examples" class="header">Examples</a>
+    <ul>
+      <li><a href="gettingStarted.html#dropwizard" class="header">Dropwizard</a></li>
+      <li><a href="gettingStarted.html#kamon" class="header">Kamon</a></li>
+      <li><a href="gettingStarted.html#sugared-dsl" class="header">Sugared DSL</a></li>
     </ul></li>
   </ul></li>
   <li><a href="backends.html" class="page">Backends</a>
@@ -199,12 +149,6 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
     <li><a href="backends.html#dropwizard" class="header">Dropwizard</a></li>
     <li><a href="backends.html#kamon" class="header">Kamon</a></li>
     <li><a href="backends.html#custom" class="header">Custom</a></li>
-  </ul></li>
-  <li><a href="examples.html" class="page">Examples</a>
-  <ul>
-    <li><a href="examples.html#dropwizard" class="header">Dropwizard</a></li>
-    <li><a href="examples.html#kamon" class="header">Kamon</a></li>
-    <li><a href="examples.html#sugared-dsl" class="header">Sugared DSL</a></li>
   </ul></li>
   <li><a href="demo.html" class="page">Demo</a>
   <ul>
@@ -218,29 +162,10 @@ The source code for this page can be found <a href="https://github.com/svezfaz/a
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="motivation.html">Motivation</a></p>
+<p><strong>Next:</strong> <a href="introduction.html">Introduction</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
-<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
-<div class="page-nav">
-<div class="nav-title">On this page:</div>
-<div class="nav-toc">
-<ul>
-  <li><a href="index.html#akka-streams-checkpoint" class="header">Akka Streams Checkpoint</a>
-  <ul>
-    <li><a href="index.html#modules" class="header">Modules</a>
-    <ul>
-      <li><a href="index.html#core" class="header">Core</a></li>
-      <li><a href="index.html#dropwizard-backend" class="header">Dropwizard backend</a></li>
-      <li><a href="index.html#kamon-backend" class="header">Kamon backend</a></li>
-    </ul></li>
-    <li><a href="index.html#scaladsl-and-javadsl" class="header">scaladsl and javadsl</a></li>
-  </ul></li>
-</ul>
-</div>
-</div>
-</nav>
 </div>
 </div>
 

@@ -30,14 +30,14 @@
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.1
+0.0.2*
 </div>
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a></li>
+  <li><a href="introduction.html" class="page">Introduction</a></li>
+  <li><a href="gettingStarted.html" class="page">Getting started</a></li>
   <li><a href="backends.html" class="active page">Backends</a></li>
-  <li><a href="examples.html" class="page">Examples</a></li>
   <li><a href="demo.html" class="page">Demo</a></li>
 </ul>
 </div>
@@ -70,14 +70,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.1
+0.0.2*
 </div>
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a></li>
+  <li><a href="introduction.html" class="page">Introduction</a></li>
+  <li><a href="gettingStarted.html" class="page">Getting started</a></li>
   <li><a href="backends.html" class="active page">Backends</a></li>
-  <li><a href="examples.html" class="page">Examples</a></li>
   <li><a href="demo.html" class="page">Demo</a></li>
 </ul>
 </div>
@@ -108,25 +108,73 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <ul>
   <li><code>{label}_push_latency</code>: <a href="dw-docs:/#histograms">histogram</a> to store the latencies between push and pull signals in nanoseconds</li>
   <li><code>{label}_pull_latency</code>: <a href="dw-docs:/#histograms">histogram</a> to store the latencies between pull and push signals in nanoseconds</li>
-  <li><code>{label}_backpressure_ratio</code>: <a href="dw-docs:/#histograms">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
   <li><code>{label}_throughput</code>: <a href="dw-docs://#meters">meter</a> to store the throughput rate of the checkpoint</li>
+  <li><code>{label}_backpressure_ratio</code>: <a href="dw-docs:/#histograms">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
+  <li><code>{label}_backpressured</code>: <a href="dw-docs://#counters">counter</a> to store the current backpressure state of the checkpoint</li>
 </ul>
 <h2><a href="#kamon" name="kamon" class="anchor"><span class="anchor-link"></span></a>Kamon</h2>
 <p>The <a href="https://kamon.io">Kamon</a> backend creates the following metrics for each checkpoint. Note that each metric will be prefixed with the checkpoint label you specify.</p>
 <ul>
   <li><code>{label}_push_latency</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the latencies between push and pull signals in nanoseconds</li>
   <li><code>{label}_pull_latency</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the latencies between pull and push signals in nanoseconds</li>
-  <li><code>{label}_backpressure_ratio</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
   <li><code>{label}_throughput</code>: <a href="kamon-docs:/core/basics/metrics/">counter</a> to store the throughput rate of the checkpoint</li>
+  <li><code>{label}_backpressure_ratio</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
+  <li><code>{label}_backpressured</code>: <a href="kamon-docs:/core/basics/metrics/">gauge</a> to store the current backpressure state of the checkpoint</li>
 </ul>
 <h2><a href="#custom" name="custom" class="anchor"><span class="anchor-link"></span></a>Custom</h2>
-<p>TODO</p>
+<p>Custom backends can be created by implementing <code>CheckpointBackend</code> and <code>CheckpointRepository</code> interfaces.</p>
+<dl>
+  <dt>Scala</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-scala">implicit val loggingBackend: CheckpointBackend = new CheckpointBackend {
+  override def createRepository(name: String): CheckpointRepository = new CheckpointRepository {
+
+    override def markPush(latencyNanos: Long, backpressureRatio: Long): Unit =
+      println(s&quot;PUSH - $name: latency:$latencyNanos, backpressure ratio:$backpressureRatio&quot;)
+
+    override def markPull(latencyNanos: Long): Unit =
+      println(s&quot;PULL - $name: latency:$latencyNanos&quot;)
+  }
+}
+
+Source(1 to 100)
+  .via(Checkpoint(&quot;produced&quot;))
+  .filter((x: Int) ⇒ x % 2 == 0)
+  .via(Checkpoint(&quot;filtered&quot;))
+  .runForeach(println)</code></pre></dd>
+  <dt>Java</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-java">final CheckpointBackend backend = new CheckpointBackend() {
+    @Override
+    public CheckpointRepository createRepository(String name) {
+        return new CheckpointRepository() {
+            @Override
+            public void markPush(long latencyNanos, long backpressureRatio) {
+                System.out.println(String.format(&quot;PUSH - %s: latency:%d, backpressure ratio: %d&quot;,
+                        name, latencyNanos, backpressureRatio));
+            }
+
+            @Override
+            public void markPull(long latencyNanos) {
+                System.out.println(String.format(&quot;PULL - %s: latency:%d&quot;,
+                        name, latencyNanos));
+            }
+        };
+    }
+};
+
+Source.range(1, 100)
+    .via(Checkpoint.create(&quot;produced&quot;, backend))
+    .filter(x -&gt; x % 2 == 0)
+    .via(Checkpoint.create(&quot;filtered&quot;, backend))
+    .runForeach(System.out::println, materializer);</code></pre></dd>
+</dl>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/svezfaz/akka-stream-checkpoint/tree/master/docs/src/main/paradox/backends.md">here</a>.
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="examples.html">Examples</a></p>
+<p><strong>Next:</strong> <a href="demo.html">Demo</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>

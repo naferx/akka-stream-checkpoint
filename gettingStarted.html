@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Examples · Akka Streams Checkpoint</title>
+<title>Getting started · Akka Streams Checkpoint</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Checkpoint stage to monitor Akka Streams streaming applications'/>
@@ -30,14 +30,14 @@
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.1
+0.0.2*
 </div>
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a></li>
+  <li><a href="introduction.html" class="page">Introduction</a></li>
+  <li><a href="gettingStarted.html" class="active page">Getting started</a></li>
   <li><a href="backends.html" class="page">Backends</a></li>
-  <li><a href="examples.html" class="active page">Examples</a></li>
   <li><a href="demo.html" class="page">Demo</a></li>
 </ul>
 </div>
@@ -70,14 +70,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.1
+0.0.2*
 </div>
 </div>
 <div class="nav-toc">
 <ul>
-  <li><a href="motivation.html" class="page">Motivation</a></li>
+  <li><a href="introduction.html" class="page">Introduction</a></li>
+  <li><a href="gettingStarted.html" class="active page">Getting started</a></li>
   <li><a href="backends.html" class="page">Backends</a></li>
-  <li><a href="examples.html" class="active page">Examples</a></li>
   <li><a href="demo.html" class="page">Demo</a></li>
 </ul>
 </div>
@@ -93,7 +93,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="index.html">Akka Streams Checkpoint</a></li>
-  <li>Examples</li>
+  <li>Getting started</li>
 </ul>
 </div>
 </div>
@@ -101,8 +101,78 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#examples" name="examples" class="anchor"><span class="anchor-link"></span></a>Examples</h1>
-<h2><a href="#dropwizard" name="dropwizard" class="anchor"><span class="anchor-link"></span></a>Dropwizard</h2>
+<h1><a href="#getting-started" name="getting-started" class="anchor"><span class="anchor-link"></span></a>Getting started</h1>
+<h2><a href="#dependencies" name="dependencies" class="anchor"><span class="anchor-link"></span></a>Dependencies</h2>
+<h3><a href="#core" name="core" class="anchor"><span class="anchor-link"></span></a>Core</h3>
+<p>The core module includes the DSLs that allow you to create the checkpoint stages to instrument your Akka Streams pipeline.</p>
+<dl>
+  <dt>sbt</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-core&quot; % &quot;0.0.2-SNAPSHOT&quot;
+</code></pre></dd>
+  <dt>Maven</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
+  &lt;artifactId&gt;akka-stream-checkpoint-core_2.12&lt;/artifactId&gt;
+  &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></dd>
+  <dt>Gradle</dt>
+  <dd>
+  <pre><code>dependencies {
+  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-core_2.12&quot;, version: &quot;0.0.2-SNAPSHOT&quot;
+}
+</code></pre></dd>
+</dl>
+<h3><a href="#dropwizard-backend" name="dropwizard-backend" class="anchor"><span class="anchor-link"></span></a>Dropwizard backend</h3>
+<p>This module provides support to back your checkpoints with <a href="http://metrics.dropwizard.io">Dropwizard</a> metrics.</p>
+<dl>
+  <dt>sbt</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-dropwizard&quot; % &quot;0.0.2-SNAPSHOT&quot;
+</code></pre></dd>
+  <dt>Maven</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
+  &lt;artifactId&gt;akka-stream-checkpoint-dropwizard_2.12&lt;/artifactId&gt;
+  &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></dd>
+  <dt>Gradle</dt>
+  <dd>
+  <pre><code>dependencies {
+  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-dropwizard_2.12&quot;, version: &quot;0.0.2-SNAPSHOT&quot;
+}
+</code></pre></dd>
+</dl>
+<h3><a href="#kamon-backend" name="kamon-backend" class="anchor"><span class="anchor-link"></span></a>Kamon backend</h3>
+<p>This module provides support to back your checkpoints with <a href="https://kamon.io">Kamon</a> metrics.</p>
+<dl>
+  <dt>sbt</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-kamon&quot; % &quot;0.0.2-SNAPSHOT&quot;
+</code></pre></dd>
+  <dt>Maven</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
+  &lt;artifactId&gt;akka-stream-checkpoint-kamon_2.12&lt;/artifactId&gt;
+  &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></dd>
+  <dt>Gradle</dt>
+  <dd>
+  <pre><code>dependencies {
+  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-kamon_2.12&quot;, version: &quot;0.0.2-SNAPSHOT&quot;
+}
+</code></pre></dd>
+</dl>
+<h2><a href="#scaladsl-and-javadsl" name="scaladsl-and-javadsl" class="anchor"><span class="anchor-link"></span></a>scaladsl and javadsl</h2>
+<p>There are two separate packages named <code>akka.stream.checkpoint.scaladsl</code> and <code>akka.stream.checkpoint.javadsl</code> with the API for Scala and Java. These packages contain a <code>Checkpoint</code> class with factory methods to create a checkpoint given a name (label) and a backend.</p>
+<h2><a href="#examples" name="examples" class="anchor"><span class="anchor-link"></span></a>Examples</h2>
+<h3><a href="#dropwizard" name="dropwizard" class="anchor"><span class="anchor-link"></span></a>Dropwizard</h3>
 <p>These examples require <code>akka-stream-checkpoint-core</code> and <code>akka-stream-checkpoint-dropwizard</code> modules.</p>
 <dl>
   <dt>Scala</dt>
@@ -127,7 +197,7 @@ Source.range(1, 100)
     .via(Checkpoint.create(&quot;filtered&quot;, backend))
     .runForeach(System.out::println, materializer);</code></pre></dd>
 </dl>
-<h2><a href="#kamon" name="kamon" class="anchor"><span class="anchor-link"></span></a>Kamon</h2>
+<h3><a href="#kamon" name="kamon" class="anchor"><span class="anchor-link"></span></a>Kamon</h3>
 <p>These examples require <code>akka-stream-checkpoint-core</code> and <code>akka-stream-checkpoint-kamon</code> modules.</p>
 <dl>
   <dt>Scala</dt>
@@ -149,7 +219,7 @@ Source.range(1, 100)
     .via(Checkpoint.create(&quot;filtered&quot;, backend))
     .runForeach(System.out::println, materializer);</code></pre></dd>
 </dl>
-<h2><a href="#sugared-dsl" name="sugared-dsl" class="anchor"><span class="anchor-link"></span></a>Sugared DSL</h2>
+<h3><a href="#sugared-dsl" name="sugared-dsl" class="anchor"><span class="anchor-link"></span></a>Sugared DSL</h3>
 <p>Regardless of the chosen backend, some syntactic sugar is available for Scala users under <code>scaladsl.Implicits</code>.</p>
 <dl>
   <dt>Scala</dt>
@@ -164,11 +234,11 @@ Source(1 to 100)
   .runForeach(println)</code></pre></dd>
 </dl>
 <div class="source-github">
-The source code for this page can be found <a href="https://github.com/svezfaz/akka-stream-checkpoint/tree/master/docs/src/main/paradox/examples.md">here</a>.
+The source code for this page can be found <a href="https://github.com/svezfaz/akka-stream-checkpoint/tree/master/docs/src/main/paradox/gettingStarted.md">here</a>.
 </div>
 
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="demo.html">Demo</a></p>
+<p><strong>Next:</strong> <a href="backends.html">Backends</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
@@ -177,11 +247,21 @@ The source code for this page can be found <a href="https://github.com/svezfaz/a
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="examples.html#examples" class="header">Examples</a>
+  <li><a href="gettingStarted.html#getting-started" class="header">Getting started</a>
   <ul>
-    <li><a href="examples.html#dropwizard" class="header">Dropwizard</a></li>
-    <li><a href="examples.html#kamon" class="header">Kamon</a></li>
-    <li><a href="examples.html#sugared-dsl" class="header">Sugared DSL</a></li>
+    <li><a href="gettingStarted.html#dependencies" class="header">Dependencies</a>
+    <ul>
+      <li><a href="gettingStarted.html#core" class="header">Core</a></li>
+      <li><a href="gettingStarted.html#dropwizard-backend" class="header">Dropwizard backend</a></li>
+      <li><a href="gettingStarted.html#kamon-backend" class="header">Kamon backend</a></li>
+    </ul></li>
+    <li><a href="gettingStarted.html#scaladsl-and-javadsl" class="header">scaladsl and javadsl</a></li>
+    <li><a href="gettingStarted.html#examples" class="header">Examples</a>
+    <ul>
+      <li><a href="gettingStarted.html#dropwizard" class="header">Dropwizard</a></li>
+      <li><a href="gettingStarted.html#kamon" class="header">Kamon</a></li>
+      <li><a href="gettingStarted.html#sugared-dsl" class="header">Sugared DSL</a></li>
+    </ul></li>
   </ul></li>
 </ul>
 </div>
