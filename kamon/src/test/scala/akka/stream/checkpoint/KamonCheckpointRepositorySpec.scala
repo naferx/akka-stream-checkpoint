@@ -23,7 +23,7 @@ class KamonCheckpointRepositorySpec extends WordSpec with MustMatchers with Metr
 
       "elements are pushed through the checkpoint" in {
         val latency = 64L
-        val backpressureRatio = 0.54
+        val backpressureRatio = 54L
         repository.markPush(latency, backpressureRatio)
 
         val latencyDistro = Kamon.histogram("test_push_latency").distribution()
@@ -32,7 +32,7 @@ class KamonCheckpointRepositorySpec extends WordSpec with MustMatchers with Metr
 
         val backpressureDistro = Kamon.histogram("test_backpressure_ratio").distribution()
         backpressureDistro.count must ===(1)
-        backpressureDistro.max   must ===(backpressureRatio * 100)
+        backpressureDistro.max   must ===(backpressureRatio)
 
         Kamon.counter("test_throughput").value().longValue() must ===(1)
       }

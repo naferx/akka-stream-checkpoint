@@ -12,9 +12,9 @@ private[checkpoint] object DropwizardCheckpointRepository {
 
     override def markPull(nanos: Long): Unit = pullLatency.update(nanos)
 
-    override def markPush(nanos: Long, ratio: BigDecimal): Unit = {
+    override def markPush(nanos: Long, ratio: Long): Unit = {
       pushLatency.update(nanos)
-      backpressureRatio.update((ratio * 100).longValue)
+      backpressureRatio.update(ratio)
       throughput.mark()
     }
   }

@@ -13,9 +13,9 @@ private[checkpoint] object KamonCheckpointRepository {
 
     override def markPull(nanos: Long): Unit = pullLatency.record(nanos)
 
-    override def markPush(nanos: Long, ratio: BigDecimal): Unit = {
+    override def markPush(nanos: Long, ratio: Long): Unit = {
       pushLatency.record(nanos)
-      backpressureRatio.record((ratio * 100).longValue)
+      backpressureRatio.record(ratio)
       throughput.increment()
     }
   }

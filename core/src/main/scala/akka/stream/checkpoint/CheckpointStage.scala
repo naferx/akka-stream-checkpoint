@@ -27,7 +27,7 @@ private[checkpoint] final case class CheckpointStage[T](repository: CheckpointRe
           push(out, grab(in))
 
           val now = System.nanoTime()
-          repository.markPush(now - lastPulled, BigDecimal(lastPulled - lastPushed) / (now - lastPushed))
+          repository.markPush(now - lastPulled, (lastPulled - lastPushed) * 100 / (now - lastPushed))
           lastPushed = now
         } catch {
           case NonFatal(ex) ⇒ decider(ex) match {

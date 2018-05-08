@@ -16,7 +16,7 @@ trait CheckpointRepository {
     * @param latencyNanos latency between the last pull signal and the registered push signal in nanoseconds
     * @param backpressureRatio ratio between the pull latency and the entire last push-push cycle
     */
-  def markPush(latencyNanos: Long, backpressureRatio: BigDecimal): Unit
+  def markPush(latencyNanos: Long, backpressureRatio: Long): Unit
 }
 
 /**

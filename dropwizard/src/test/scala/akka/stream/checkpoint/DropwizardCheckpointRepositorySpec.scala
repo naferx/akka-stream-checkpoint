@@ -24,14 +24,14 @@ class DropwizardCheckpointRepositorySpec extends WordSpec with MustMatchers {
 
       "elements are pushed through the checkpoint" in {
         val latency = 5.millis.toNanos
-        val backpressureRatio = 0.93
+        val backpressureRatio = 93L
         repository.markPush(latency, backpressureRatio)
 
         registry.histogram("test_push_latency").getCount must ===(1)
         registry.histogram("test_push_latency").getSnapshot.getValues must ===(Array(latency))
 
         registry.histogram("test_backpressure_ratio").getCount must ===(1)
-        registry.histogram("test_backpressure_ratio").getSnapshot.getValues must ===(Array(backpressureRatio * 100))
+        registry.histogram("test_backpressure_ratio").getSnapshot.getValues must ===(Array(backpressureRatio))
 
         registry.meter("test_throughput").getCount must ===(1)
       }

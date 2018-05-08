@@ -20,7 +20,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
 
       val noopRepo = new CheckpointRepository {
         override def markPull(latencyNanos: Long): Unit = ()
-        override def markPush(latencyNanos: Long, backpressureRatio: BigDecimal): Unit = ()
+        override def markPush(latencyNanos: Long, backpressureRatio: Long): Unit = ()
       }
 
       val values = 1 to 5
@@ -38,7 +38,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       val pullLatencies = ListBuffer.empty[Long]
 
       val arrayBackedRepo = new CheckpointRepository {
-        override def markPush(nanos: Long, backpressureRatio: BigDecimal): Unit = pushLatencies += nanos
+        override def markPush(nanos: Long, backpressureRatio: Long): Unit = pushLatencies += nanos
         override def markPull(nanos: Long): Unit = pullLatencies += nanos
       }
 
@@ -78,13 +78,13 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       val pullLatency = 100.millis
       val pushLatency = 900.millis
 
-      val expectedRatio = BigDecimal(0.1)
-      val tolerance     = 0.01
+      val expectedRatio = 10L
+      val tolerance     = 1L
 
-      val backpressureRatios = ListBuffer.empty[BigDecimal]
+      val backpressureRatios = ListBuffer.empty[Long]
 
       val arrayBackedRepo = new CheckpointRepository {
-        override def markPush(nanos: Long, backpressureRatio: BigDecimal): Unit = backpressureRatios += backpressureRatio
+        override def markPush(nanos: Long, backpressureRatio: Long): Unit = backpressureRatios += backpressureRatio
         override def markPull(nanos: Long): Unit = ()
       }
 
