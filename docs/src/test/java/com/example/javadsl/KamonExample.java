@@ -15,7 +15,7 @@ public class KamonExample {
         final Materializer materializer = ActorMaterializer.create(system);
 
         // #kamon
-        final CheckpointBackend backend     = KamonBackend.instance();
+        final CheckpointBackend backend = KamonBackend.instance();
 
         Source.range(1, 100)
             .via(Checkpoint.create("produced", backend))
