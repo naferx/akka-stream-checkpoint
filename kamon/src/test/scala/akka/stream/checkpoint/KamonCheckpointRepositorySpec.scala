@@ -19,6 +19,8 @@ class KamonCheckpointRepositorySpec extends WordSpec with MustMatchers with Metr
         val distribution = Kamon.histogram("test_pull_latency").distribution()
         distribution.count must ===(1)
         distribution.max   must ===(latency)
+
+        Kamon.gauge("test_backpressured").value() must ===(0)
       }
 
       "elements are pushed through the checkpoint" in {
@@ -34,7 +36,10 @@ class KamonCheckpointRepositorySpec extends WordSpec with MustMatchers with Metr
         backpressureDistro.count must ===(1)
         backpressureDistro.max   must ===(backpressureRatio)
 
-        Kamon.counter("test_throughput").value().longValue() must ===(1)
+        Kamon.counter("test_throughput").value() must ===(1)
+
+        Kamon.gauge("test_backpressured").value() must ===(1)
+
       }
     }
   }

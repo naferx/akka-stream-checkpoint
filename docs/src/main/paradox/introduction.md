@@ -1,4 +1,6 @@
-# Motivation
+# Introduction
+
+## Motivation
 
 [Reactive Streams](http://www.reactive-streams.org/) are the key to build asynchronous, data-intensive applications with 
 no predetermined data volumes. By enabling non-blocking backpressure, they boost the resiliency of your systems by design.
@@ -19,13 +21,14 @@ pipeline to go "as fast as possible, but not faster". However, this gets in the 
 as there is no clear way of understanding what is backpressuring and what's not.
 
 Whilst Akka Streams doesn't currently provide a comprehensive solution to these issues, it exposes a low-level API that 
-allows to perform custom actions when _push_ and _pull_ signals are sent to a stage. For more details on this, check out 
-this section of the [Akka Streams](akka-docs:/scala/stream/stream-customize.html) documentation.
+allows to perform custom actions when _push_ and _pull_ signals are sent to a stage. This library leverages this API. 
+For more details on this, check out [this section](akka-docs:/stream/stream-customize.html) of the Akka Streams 
+documentation.
 
 ## What this library does
 
-_Akka Streams Checkpoint_ is attempt to overcome the two challenges above. It allows to create generic, pass-through stages
-that can be placed at meaningful points in your pipeline. A checkpoint will record  
+_Akka Streams Checkpoint_ attempts to overcome the two challenges above. It allows to create generic, pass-through stages
+that can be placed at meaningful points in your pipeline. 
 
 ### Throughput
 Throughput is the measurement of how many events are processed by your pipeline in a unit of time. Because of non-linearity,
@@ -64,14 +67,21 @@ The _backpressure ratio_ metric measures the percentage of time spent by the che
 backpressure ratio indicates that a bottleneck is present downstream of the checkpoint.
 
 ### Liveness
-TODO
+Backpressured systems can suffer from liveness issues. These can have a variety of causes, ranging from an unresponsive 
+third party, all the way to [code bugs](akka-docs:/stream/stream-graphs.html#graph-cycles-liveness-and-deadlocks).
+In case of a liveness issue, no demand will flow from downstream to upstream. This will cause all the metrics 
+previously described to fall silent. To solve this issue, each _checkpoint_ keeps a basic flag counter that represents
+if the _checkpoint_ is currently backpressured. Because of its simplicity, this metric becomes meaningful in case of 
+liveness issues.
 
 ## What this library does NOT
 
 ### Error tracking
 _Akka Streams Checkpoint_ does not currently offer a way to record errors or completion events happening in the pipeline.
-Check out [these stages](https://doc.akka.io/docs/akka/snapshot/stream/operators/index.html#watching-status-stages) 
+Check out [these stages](akka-docs:/stream/operators/index.html#watching-status-stages) 
 already provided by Akka Streams for these purposes.
 
 ### Trace context
-TODO this can be implemented at a different level. it does not fit non-linear streaming processes well
+_Akka Streams Checkpoint_ is not a solution to allow tracing of context in Akka Streams applications. However, the
+checkpoints provided by this library are completely transparent and should be able to coexist with any pipeline model,
+including trace context.

@@ -20,6 +20,8 @@ class DropwizardCheckpointRepositorySpec extends WordSpec with MustMatchers {
 
         registry.histogram("test_pull_latency").getCount must ===(1)
         registry.histogram("test_pull_latency").getSnapshot.getValues must ===(Array(latency))
+
+        registry.counter("test_backpressured").getCount must ===(0)
       }
 
       "elements are pushed through the checkpoint" in {
@@ -34,6 +36,8 @@ class DropwizardCheckpointRepositorySpec extends WordSpec with MustMatchers {
         registry.histogram("test_backpressure_ratio").getSnapshot.getValues must ===(Array(backpressureRatio))
 
         registry.meter("test_throughput").getCount must ===(1)
+
+        registry.counter("test_backpressured").getCount must ===(1)
       }
     }
   }
