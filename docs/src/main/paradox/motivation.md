@@ -45,9 +45,23 @@ and [Datadog](https://www.datadoghq.com/) allow to compose series.
 @@@
 
 ### Pull-push and push-pull latency
+Each _checkpoint_ is a linear stage that emits downstream all the elements which are pushed from upstream. This means that 
+for each pull from downstream, there will be a push from upstream.
+Latency is being measured:
+
+- _between a push and the last pull_: this will give us a reading of how much time the upstream takes to produce an element after 
+it's been requested
+- _between a pull and the last push_: this will give us a reading of how time the downstream takes to request an element after
+the previous element has been emitted
 
 ### Backpressure ratio
+A _checkpoint_ can be in one of two working states:
 
+- _backpressuring_: the checkpoint is waiting for a pull from the downstream
+- _NOT backpressuring_: the checkpoint is waiting for a push from the upstream
+
+The _backpressure ratio_ metric measures the percentage of time spent by the checkpoint in the backpressuring state. A high
+backpressure ratio indicates that a bottleneck is present downstream of the checkpoint.
 
 ### Liveness
 TODO
