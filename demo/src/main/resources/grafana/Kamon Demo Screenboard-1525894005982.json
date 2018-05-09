@@ -42,7 +42,7 @@
   "rows": [
     {
       "collapse": false,
-      "height": 252,
+      "height": 234,
       "panels": [
         {
           "cacheTimeout": null,
@@ -76,7 +76,7 @@
               "value": 2
             }
           ],
-          "maxDataPoints": 100,
+          "maxDataPoints": "100",
           "nullPointMode": "connected",
           "nullText": null,
           "postfix": "",
@@ -90,7 +90,7 @@
               "to": "null"
             }
           ],
-          "span": 1,
+          "span": 2,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -101,7 +101,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.A_backpressured.count"
+              "target": "stats.gauges.kamon-application.A_backpressured"
             }
           ],
           "thresholds": "1",
@@ -111,13 +111,13 @@
           "valueMaps": [
             {
               "op": "=",
-              "text": "NO",
-              "value": "0"
+              "text": "YES",
+              "value": "1"
             },
             {
               "op": "=",
-              "text": "YES",
-              "value": "1"
+              "text": "NO",
+              "value": "0"
             }
           ],
           "valueName": "current"
@@ -179,7 +179,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.A_throughput.m1_rate"
+              "target": "stats.counters.kamon-application.A_throughput.rate"
             }
           ],
           "thresholds": "",
@@ -241,7 +241,7 @@
               "to": "null"
             }
           ],
-          "span": 6,
+          "span": 8,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -252,7 +252,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.A_backpressure_ratio.mean"
+              "target": "stats.timers.kamon-application.A_backpressure_ratio.mean"
             }
           ],
           "thresholds": "50,95",
@@ -278,7 +278,7 @@
     },
     {
       "collapse": false,
-      "height": 249,
+      "height": 233,
       "panels": [
         {
           "cacheTimeout": null,
@@ -326,7 +326,7 @@
               "to": "null"
             }
           ],
-          "span": 1,
+          "span": 2,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -337,7 +337,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.B_backpressured.count"
+              "target": "stats.gauges.kamon-application.B_backpressured"
             }
           ],
           "thresholds": "1",
@@ -415,7 +415,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.B_throughput.m1_rate"
+              "target": "stats.counters.kamon-application.B_throughput.rate"
             }
           ],
           "thresholds": "",
@@ -477,7 +477,7 @@
               "to": "null"
             }
           ],
-          "span": 6,
+          "span": 8,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -488,7 +488,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.B_backpressure_ratio.mean"
+              "target": "stats.timers.kamon-application.B_backpressure_ratio.mean"
             }
           ],
           "thresholds": "50,95",
@@ -514,12 +514,12 @@
     },
     {
       "collapse": false,
-      "height": 235,
+      "height": 247,
       "panels": [
         {
           "cacheTimeout": null,
           "colorBackground": true,
-          "colorValue": true,
+          "colorValue": false,
           "colors": [
             "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
@@ -562,7 +562,7 @@
               "to": "null"
             }
           ],
-          "span": 1,
+          "span": 2,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -573,7 +573,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.C_backpressured.count"
+              "target": "stats.gauges.kamon-application.C_backpressured"
             }
           ],
           "thresholds": "1",
@@ -651,7 +651,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.C_throughput.m1_rate"
+              "target": "stats.counters.kamon-application.C_throughput.rate"
             }
           ],
           "thresholds": "",
@@ -713,7 +713,7 @@
               "to": "null"
             }
           ],
-          "span": 6,
+          "span": 8,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -724,7 +724,7 @@
           "targets": [
             {
               "refId": "A",
-              "target": "dropwizard.C_backpressure_ratio.mean"
+              "target": "stats.timers.kamon-application.C_backpressure_ratio.mean"
             }
           ],
           "thresholds": "50,95",
@@ -785,6 +785,6 @@
     ]
   },
   "timezone": "",
-  "title": "Dropwizard Demo Screenboard",
-  "version": 5
+  "title": "Kamon Demo Screenboard",
+  "version": 2
 }
