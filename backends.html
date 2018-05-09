@@ -30,7 +30,7 @@
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.2*
+0.0.2
 </div>
 </div>
 <div class="nav-toc">
@@ -70,7 +70,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.2*
+0.0.2
 </div>
 </div>
 <div class="nav-toc">
@@ -106,23 +106,23 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <h2><a href="#dropwizard" name="dropwizard" class="anchor"><span class="anchor-link"></span></a>Dropwizard</h2>
 <p>The <a href="http://metrics.dropwizard.io">Dropwizard</a> backend creates the following metrics for each checkpoint. Note that each metric will be prefixed with the checkpoint label you specify.</p>
 <ul>
-  <li><code>{label}_push_latency</code>: <a href="dw-docs:/#histograms">histogram</a> to store the latencies between push and pull signals in nanoseconds</li>
-  <li><code>{label}_pull_latency</code>: <a href="dw-docs:/#histograms">histogram</a> to store the latencies between pull and push signals in nanoseconds</li>
-  <li><code>{label}_throughput</code>: <a href="dw-docs://#meters">meter</a> to store the throughput rate of the checkpoint</li>
-  <li><code>{label}_backpressure_ratio</code>: <a href="dw-docs:/#histograms">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
-  <li><code>{label}_backpressured</code>: <a href="dw-docs://#counters">counter</a> to store the current backpressure state of the checkpoint</li>
+  <li><code>{label}_push_latency</code>: <a href="http://metrics.dropwizard.io/4.0.2/getting-started">histogram</a> to store the latencies between push and pull signals in nanoseconds</li>
+  <li><code>{label}_pull_latency</code>: <a href="http://metrics.dropwizard.io/4.0.2/getting-started">histogram</a> to store the latencies between pull and push signals in nanoseconds</li>
+  <li><code>{label}_throughput</code>: <a href="http://metrics.dropwizard.io/4.0.2/getting-started">meter</a> to store the throughput rate of the checkpoint</li>
+  <li><code>{label}_backpressure_ratio</code>: <a href="http://metrics.dropwizard.io/4.0.2/getting-started">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
+  <li><code>{label}_backpressured</code>: <a href="http://metrics.dropwizard.io/4.0.2/getting-started">counter</a> to store the current backpressure state of the checkpoint</li>
 </ul>
 <h2><a href="#kamon" name="kamon" class="anchor"><span class="anchor-link"></span></a>Kamon</h2>
 <p>The <a href="https://kamon.io">Kamon</a> backend creates the following metrics for each checkpoint. Note that each metric will be prefixed with the checkpoint label you specify.</p>
 <ul>
-  <li><code>{label}_push_latency</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the latencies between push and pull signals in nanoseconds</li>
-  <li><code>{label}_pull_latency</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the latencies between pull and push signals in nanoseconds</li>
-  <li><code>{label}_throughput</code>: <a href="kamon-docs:/core/basics/metrics/">counter</a> to store the throughput rate of the checkpoint</li>
-  <li><code>{label}_backpressure_ratio</code>: <a href="kamon-docs:/core/basics/metrics/">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
-  <li><code>{label}_backpressured</code>: <a href="kamon-docs:/core/basics/metrics/">gauge</a> to store the current backpressure state of the checkpoint</li>
+  <li><code>{label}_push_latency</code>: <a href="http://kamon.io/documentation/1.x">histogram</a> to store the latencies between push and pull signals in nanoseconds</li>
+  <li><code>{label}_pull_latency</code>: <a href="http://kamon.io/documentation/1.x">histogram</a> to store the latencies between pull and push signals in nanoseconds</li>
+  <li><code>{label}_throughput</code>: <a href="http://kamon.io/documentation/1.x">counter</a> to store the throughput rate of the checkpoint</li>
+  <li><code>{label}_backpressure_ratio</code>: <a href="http://kamon.io/documentation/1.x">histogram</a> to store the percentage of time the checkpoint is backpressuring</li>
+  <li><code>{label}_backpressured</code>: <a href="http://kamon.io/documentation/1.x">gauge</a> to store the current backpressure state of the checkpoint</li>
 </ul>
 <h2><a href="#custom" name="custom" class="anchor"><span class="anchor-link"></span></a>Custom</h2>
-<p>Custom backends can be created by implementing <code>CheckpointBackend</code> and <code>CheckpointRepository</code> interfaces.</p>
+<p>Custom backends can be created by implementing <code>CheckpointBackend</code> and <code>CheckpointRepository</code> interfaces. The following example is a backend that simply prints readings to stdout.</p>
 <dl>
   <dt>Scala</dt>
   <dd>
@@ -163,11 +163,11 @@ Source(1 to 100)
     }
 };
 
-Source.range(1, 100)
-    .via(Checkpoint.create(&quot;produced&quot;, backend))
-    .filter(x -&gt; x % 2 == 0)
-    .via(Checkpoint.create(&quot;filtered&quot;, backend))
-    .runForeach(System.out::println, materializer);</code></pre></dd>
+final CompletionStage&lt;Done&gt; done = Source.range(1, 100)
+        .via(Checkpoint.create(&quot;produced&quot;, backend))
+        .filter(x -&gt; x % 2 == 0)
+        .via(Checkpoint.create(&quot;filtered&quot;, backend))
+        .runForeach(System.out::println, materializer);</code></pre></dd>
 </dl>
 <div class="source-github">
 The source code for this page can be found <a href="https://github.com/svezfaz/akka-stream-checkpoint/tree/master/docs/src/main/paradox/backends.md">here</a>.

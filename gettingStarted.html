@@ -30,7 +30,7 @@
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.2*
+0.0.2
 </div>
 </div>
 <div class="nav-toc">
@@ -70,7 +70,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.2*
+0.0.2
 </div>
 </div>
 <div class="nav-toc">
@@ -108,20 +108,20 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <dl>
   <dt>sbt</dt>
   <dd>
-  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-core&quot; % &quot;0.0.2-SNAPSHOT&quot;
+  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-core&quot; % &quot;0.0.2&quot;
 </code></pre></dd>
   <dt>Maven</dt>
   <dd>
   <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
   &lt;artifactId&gt;akka-stream-checkpoint-core_2.12&lt;/artifactId&gt;
-  &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;0.0.2&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre></dd>
   <dt>Gradle</dt>
   <dd>
   <pre><code>dependencies {
-  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-core_2.12&quot;, version: &quot;0.0.2-SNAPSHOT&quot;
+  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-core_2.12&quot;, version: &quot;0.0.2&quot;
 }
 </code></pre></dd>
 </dl>
@@ -130,20 +130,20 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <dl>
   <dt>sbt</dt>
   <dd>
-  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-dropwizard&quot; % &quot;0.0.2-SNAPSHOT&quot;
+  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-dropwizard&quot; % &quot;0.0.2&quot;
 </code></pre></dd>
   <dt>Maven</dt>
   <dd>
   <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
   &lt;artifactId&gt;akka-stream-checkpoint-dropwizard_2.12&lt;/artifactId&gt;
-  &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;0.0.2&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre></dd>
   <dt>Gradle</dt>
   <dd>
   <pre><code>dependencies {
-  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-dropwizard_2.12&quot;, version: &quot;0.0.2-SNAPSHOT&quot;
+  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-dropwizard_2.12&quot;, version: &quot;0.0.2&quot;
 }
 </code></pre></dd>
 </dl>
@@ -152,20 +152,20 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <dl>
   <dt>sbt</dt>
   <dd>
-  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-kamon&quot; % &quot;0.0.2-SNAPSHOT&quot;
+  <pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;com.github.svezfaz&quot; %% &quot;akka-stream-checkpoint-kamon&quot; % &quot;0.0.2&quot;
 </code></pre></dd>
   <dt>Maven</dt>
   <dd>
   <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;com.github.svezfaz&lt;/groupId&gt;
   &lt;artifactId&gt;akka-stream-checkpoint-kamon_2.12&lt;/artifactId&gt;
-  &lt;version&gt;0.0.2-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;0.0.2&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre></dd>
   <dt>Gradle</dt>
   <dd>
   <pre><code>dependencies {
-  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-kamon_2.12&quot;, version: &quot;0.0.2-SNAPSHOT&quot;
+  compile group: &quot;com.github.svezfaz&quot;, name: &quot;akka-stream-checkpoint-kamon_2.12&quot;, version: &quot;0.0.2&quot;
 }
 </code></pre></dd>
 </dl>
@@ -191,11 +191,11 @@ Source(1 to 100)
   <pre class="prettyprint"><code class="language-java">final MetricRegistry metricRegistry = new MetricRegistry();
 final CheckpointBackend backend     = DropwizardBackend.fromRegistry(metricRegistry);
 
-Source.range(1, 100)
-    .via(Checkpoint.create(&quot;produced&quot;, backend))
-    .filter(x -&gt; x % 2 == 0)
-    .via(Checkpoint.create(&quot;filtered&quot;, backend))
-    .runForeach(System.out::println, materializer);</code></pre></dd>
+final CompletionStage&lt;Done&gt; done = Source.range(1, 100)
+        .via(Checkpoint.create(&quot;produced&quot;, backend))
+        .filter(x -&gt; x % 2 == 0)
+        .via(Checkpoint.create(&quot;filtered&quot;, backend))
+        .runForeach(System.out::println, materializer);</code></pre></dd>
 </dl>
 <h3><a href="#kamon" name="kamon" class="anchor"><span class="anchor-link"></span></a>Kamon</h3>
 <p>These examples require <code>akka-stream-checkpoint-core</code> and <code>akka-stream-checkpoint-kamon</code> modules.</p>
@@ -211,13 +211,13 @@ Source(1 to 100)
   .runForeach(println)</code></pre></dd>
   <dt>Java</dt>
   <dd>
-  <pre class="prettyprint"><code class="language-java">final CheckpointBackend backend     = KamonBackend.instance();
+  <pre class="prettyprint"><code class="language-java">final CheckpointBackend backend = KamonBackend.instance();
 
-Source.range(1, 100)
-    .via(Checkpoint.create(&quot;produced&quot;, backend))
-    .filter(x -&gt; x % 2 == 0)
-    .via(Checkpoint.create(&quot;filtered&quot;, backend))
-    .runForeach(System.out::println, materializer);</code></pre></dd>
+final CompletionStage&lt;Done&gt; done = Source.range(1, 100)
+        .via(Checkpoint.create(&quot;produced&quot;, backend))
+        .filter(x -&gt; x % 2 == 0)
+        .via(Checkpoint.create(&quot;filtered&quot;, backend))
+        .runForeach(System.out::println, materializer);</code></pre></dd>
 </dl>
 <h3><a href="#sugared-dsl" name="sugared-dsl" class="anchor"><span class="anchor-link"></span></a>Sugared DSL</h3>
 <p>Regardless of the chosen backend, some syntactic sugar is available for Scala users under <code>scaladsl.Implicits</code>.</p>

@@ -30,7 +30,7 @@
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.2*
+0.0.2
 </div>
 </div>
 <div class="nav-toc">
@@ -70,7 +70,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>Akka Streams Checkpoint
 </a>
 <div class="version-number">
-0.0.2*
+0.0.2
 </div>
 </div>
 <div class="nav-toc">
@@ -103,7 +103,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#introduction" name="introduction" class="anchor"><span class="anchor-link"></span></a>Introduction</h1>
 <h2><a href="#motivation" name="motivation" class="anchor"><span class="anchor-link"></span></a>Motivation</h2>
-<p><a href="http://www.reactive-streams.org/">Reactive Streams</a> are the key to build asynchronous, data-intensive applications with no predetermined data volumes. By enabling non-blocking backpressure, they boost the resiliency of your systems by design. <a href="akka-docs:scala/stream/index.html">Akka Streams</a> is a widely used toolkit that internally implements the Reactive Streams JVM specification, whilst offering a much more user-friendly API.</p>
+<p><a href="http://www.reactive-streams.org/">Reactive Streams</a> are the key to build asynchronous, data-intensive applications with no predetermined data volumes. By enabling non-blocking backpressure, they boost the resiliency of your systems by design. <a href="http://doc.akka.io/docs/akka/2.5.12/scala/stream/index.html">Akka Streams</a> is a widely used toolkit that internally implements the Reactive Streams JVM specification, whilst offering a much more user-friendly API.</p>
 <p>But how do you tune and debug such applications? Two main challenges make monitoring Akka Streams application very different (and somehow trickier) then traditional applications.</p>
 <ol>
   <li>
@@ -111,7 +111,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li>
   <p><strong>backpressure</strong>: Akka Streams stages are backpressure-enabled. This means that, in a multi-stage pipeline, the slower stage will determine the throughput of the whole pipeline. This is the whole point of Reactive Streams, allowing your pipeline to go &ldquo;as fast as possible, but not faster&rdquo;. However, this gets in the way of effectively looking for bottlenecks, as there is no clear way of understanding what is backpressuring and what&rsquo;s not.</p></li>
 </ol>
-<p>Whilst Akka Streams doesn&rsquo;t currently provide a comprehensive solution to these issues, it exposes a low-level API that allows to perform custom actions when <em>push</em> and <em>pull</em> signals are sent to a stage. This library leverages this API. For more details on this, check out <a href="akka-docs:/stream/stream-customize.html">this section</a> of the Akka Streams documentation.</p>
+<p>Whilst Akka Streams doesn&rsquo;t currently provide a comprehensive solution to these issues, it exposes a low-level API that allows to perform custom actions when <em>push</em> and <em>pull</em> signals are sent to a stage. This library leverages this API. For more details on this, check out <a href="http://doc.akka.io/docs/akka/2.5.12/stream/stream-customize.html">this section</a> of the Akka Streams documentation.</p>
 <h2><a href="#what-this-library-does" name="what-this-library-does" class="anchor"><span class="anchor-link"></span></a>What this library does</h2>
 <p><em>Akka Streams Checkpoint</em> attempts to overcome the two challenges above. It allows to create generic, pass-through stages that can be placed at meaningful points in your pipeline. </p>
 <h3><a href="#throughput" name="throughput" class="anchor"><span class="anchor-link"></span></a>Throughput</h3>
@@ -132,10 +132,10 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 </ul>
 <p>The <em>backpressure ratio</em> metric measures the percentage of time spent by the checkpoint in the backpressuring state. A high backpressure ratio indicates that a bottleneck is present downstream of the checkpoint.</p>
 <h3><a href="#liveness" name="liveness" class="anchor"><span class="anchor-link"></span></a>Liveness</h3>
-<p>Backpressured systems can suffer from liveness issues. These can have a variety of causes, ranging from an unresponsive third party, all the way to <a href="akka-docs:/stream/stream-graphs.html#graph-cycles-liveness-and-deadlocks">code bugs</a>. In case of a liveness issue, no demand will flow from downstream to upstream. This will cause all the metrics previously described to fall silent. To solve this issue, each <em>checkpoint</em> keeps a basic flag counter that represents if the <em>checkpoint</em> is currently backpressured. Because of its simplicity, this metric becomes meaningful in case of liveness issues.</p>
+<p>Backpressured systems can suffer from liveness issues. These can have a variety of causes, ranging from an unresponsive third party, all the way to <a href="http://doc.akka.io/docs/akka/2.5.12/stream/stream-graphs.html#graph-cycles-liveness-and-deadlocks">code bugs</a>. In case of a liveness issue, no demand will flow from downstream to upstream. This will cause all the metrics previously described to fall silent. To solve this issue, each <em>checkpoint</em> keeps a basic flag counter that represents if the <em>checkpoint</em> is currently backpressured. Because of its simplicity, this metric becomes meaningful in case of liveness issues.</p>
 <h2><a href="#what-this-library-does-not" name="what-this-library-does-not" class="anchor"><span class="anchor-link"></span></a>What this library does NOT</h2>
 <h3><a href="#error-tracking" name="error-tracking" class="anchor"><span class="anchor-link"></span></a> Error tracking</h3>
-<p><em>Akka Streams Checkpoint</em> does not currently offer a way to record errors or completion events happening in the pipeline. Check out <a href="akka-docs:/stream/operators/index.html#watching-status-stages">these stages</a> already provided by Akka Streams for these purposes.</p>
+<p><em>Akka Streams Checkpoint</em> does not currently offer a way to record errors or completion events happening in the pipeline. Check out <a href="http://doc.akka.io/docs/akka/2.5.12/stream/operators/index.html#watching-status-stages">these stages</a> already provided by Akka Streams for these purposes.</p>
 <h3><a href="#trace-context" name="trace-context" class="anchor"><span class="anchor-link"></span></a>Trace context</h3>
 <p><em>Akka Streams Checkpoint</em> is not a solution to allow tracing of context in Akka Streams applications. However, the checkpoints provided by this library are completely transparent and should be able to coexist with any pipeline model, including trace context.</p>
 <div class="source-github">
