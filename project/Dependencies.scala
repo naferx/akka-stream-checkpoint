@@ -29,8 +29,6 @@ object Dependencies {
 
   val docs = Seq(libraryDependencies ++= Seq(
     "com.typesafe.akka"     %% "akka-slf4j"       % akkaVersion,
-    "org.slf4j"             %  "slf4j-api"        % "1.7.16" % Runtime,
-    "ch.qos.logback"        %  "logback-classic"  % "1.1.5"  % Runtime,
     "io.dropwizard.metrics" %  "metrics-graphite" % dropwizardVersion,
     "io.kamon"              %% "kamon-statsd"     % "1.0.0"
   ))
