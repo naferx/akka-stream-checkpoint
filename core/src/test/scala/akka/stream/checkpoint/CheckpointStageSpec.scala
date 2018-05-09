@@ -1,5 +1,7 @@
 package akka.stream.checkpoint
 
+import java.util.concurrent.ConcurrentLinkedQueue
+
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Keep, Sink, Source}
@@ -7,7 +9,6 @@ import akka.stream.testkit.scaladsl.TestSink
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.{MustMatchers, WordSpec}
 
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
 
 class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures with Eventually {
@@ -36,12 +37,12 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
 
       val tolerance   = 100.millis
 
-      val pushLatencies = ListBuffer.empty[Long]
-      val pullLatencies = ListBuffer.empty[Long]
+      val pushLatencies = new ConcurrentLinkedQueue[Long]()
+      val pullLatencies = new ConcurrentLinkedQueue[Long]()
 
       val arrayBackedRepo = new CheckpointRepository {
-        override def markPush(nanos: Long, backpressureRatio: Long): Unit = pushLatencies += nanos
-        override def markPull(nanos: Long): Unit = pullLatencies += nanos
+        override def markPush(nanos: Long, backpressureRatio: Long): Unit = pushLatencies.offer(nanos)
+        override def markPull(nanos: Long): Unit = pullLatencies.offer(nanos)
       }
 
       val (sourcePromise, probe) =
@@ -60,7 +61,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
         pullLatencies.size must ===(1)
         pushLatencies.size must ===(0)
 
-        pullLatencies.head must ===(pullLatency.toNanos +- tolerance.toNanos)
+        pullLatencies.peek must ===(pullLatency.toNanos +- tolerance.toNanos)
       }
 
       Thread.sleep(pushLatency.toMillis)
@@ -70,7 +71,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
         pullLatencies.size must ===(1)
         pushLatencies.size must ===(1)
 
-        pushLatencies.head must ===(pushLatency.toNanos +- tolerance.toNanos)
+        pushLatencies.peek must ===(pushLatency.toNanos +- tolerance.toNanos)
       }
 
       probe.expectNext(42)
@@ -83,10 +84,10 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
       val expectedRatio = 10L
       val tolerance     = 1L
 
-      val backpressureRatios = ListBuffer.empty[Long]
+      val backpressureRatios = new ConcurrentLinkedQueue[Long]()
 
       val arrayBackedRepo = new CheckpointRepository {
-        override def markPush(nanos: Long, backpressureRatio: Long): Unit = backpressureRatios += backpressureRatio
+        override def markPush(nanos: Long, backpressureRatio: Long): Unit = backpressureRatios.offer(backpressureRatio)
         override def markPull(nanos: Long): Unit = ()
       }
 
@@ -104,7 +105,7 @@ class CheckpointStageSpec extends WordSpec with MustMatchers with ScalaFutures w
 
       eventually {
         backpressureRatios.size must ===(1)
-        backpressureRatios.head must ===(expectedRatio +- tolerance)
+        backpressureRatios.peek must ===(expectedRatio +- tolerance)
       }
     }
   }
