@@ -27,12 +27,6 @@
       "id": "graphite",
       "name": "Graphite",
       "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": ""
     }
   ],
   "annotations": {
@@ -84,17 +78,17 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "alias(dropwizard.A_push.m1_rate, 'A')"
+              "target": "alias(stats.counters.kamon-application.A_throughput.rate, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "alias(dropwizard.B_push.m1_rate, 'B')"
+              "target": "alias(stats.counters.kamon-application.B_throughput.rate, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "alias(dropwizard.C_push.m1_rate, 'C')"
+              "target": "alias(stats.counters.kamon-application.C_throughput.rate, 'C')"
             }
           ],
           "thresholds": [],
@@ -178,15 +172,15 @@
           "targets": [
             {
               "refId": "A",
-              "target": "alias(dropwizard.A_pull.p99, 'A')"
+              "target": "alias(stats.timers.kamon-application.A_pull_latency.mean_99, 'A')"
             },
             {
               "refId": "B",
-              "target": "alias(dropwizard.B_pull.p99, 'B')"
+              "target": "alias(stats.timers.kamon-application.B_pull_latency.mean_99, 'B')"
             },
             {
-              "refId": "C",
-              "target": "alias(dropwizard.C_pull.p99, 'C')"
+              "refId": "D",
+              "target": "alias(stats.timers.kamon-application.C_pull_latency.mean_99, 'C')"
             }
           ],
           "thresholds": [],
@@ -258,15 +252,15 @@
           "targets": [
             {
               "refId": "A",
-              "target": "alias(dropwizard.A_push.p99, 'A')"
+              "target": "alias(stats.timers.kamon-application.A_push_latency.mean_99, 'A')"
             },
             {
               "refId": "B",
-              "target": "alias(dropwizard.B_push.p99, 'B')"
+              "target": "alias(stats.timers.kamon-application.B_push_latency.mean_99, 'B')"
             },
             {
               "refId": "C",
-              "target": "alias(dropwizard.C_push.p99, 'C')"
+              "target": "alias(stats.timers.kamon-application.C_push_latency.mean_99, 'C')"
             }
           ],
           "thresholds": [],
@@ -351,17 +345,17 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "alias(dropwizard.A_pull.mean, 'A')"
+              "target": "alias(stats.timers.kamon-application.A_pull_latency.mean, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "alias(dropwizard.B_pull.mean, 'B')"
+              "target": "alias(stats.timers.kamon-application.B_pull_latency.mean, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "alias(dropwizard.C_pull.mean, 'C')"
+              "target": "alias(stats.timers.kamon-application.C_pull_latency.mean, 'C')"
             }
           ],
           "thresholds": [],
@@ -434,17 +428,17 @@
             {
               "hide": false,
               "refId": "A",
-              "target": "alias(dropwizard.A_push.mean, 'A')"
+              "target": "alias(stats.timers.kamon-application.A_push_latency.mean, 'A')"
             },
             {
               "hide": false,
               "refId": "B",
-              "target": "alias(dropwizard.B_push.mean, 'B')"
+              "target": "alias(stats.timers.kamon-application.B_push_latency.mean, 'B')"
             },
             {
               "hide": false,
               "refId": "C",
-              "target": "alias(dropwizard.C_push.mean, 'C')"
+              "target": "alias(stats.timers.kamon-application.C_push_latency.mean, 'C')"
             }
           ],
           "thresholds": [],
@@ -527,52 +521,16 @@
           "steppedLine": false,
           "targets": [
             {
-              "hide": true,
-              "refId": "A",
-              "target": "dropwizard.A_pull.mean"
-            },
-            {
-              "hide": true,
-              "refId": "B",
-              "target": "dropwizard.B_pull.mean"
-            },
-            {
-              "hide": true,
-              "refId": "C",
-              "target": "dropwizard.C_pull.mean"
-            },
-            {
-              "hide": true,
-              "refId": "D",
-              "target": "sumSeries(dropwizard.A_push.mean, #A)",
-              "targetFull": "sumSeries(dropwizard.A_push.mean, dropwizard.A_pull.mean)"
-            },
-            {
-              "hide": true,
-              "refId": "E",
-              "target": "sumSeries(dropwizard.B_push.mean, #B)",
-              "targetFull": "sumSeries(dropwizard.B_push.mean, dropwizard.B_pull.mean)"
-            },
-            {
-              "hide": true,
-              "refId": "F",
-              "target": "sumSeries(dropwizard.C_push.mean, #C)",
-              "targetFull": "sumSeries(dropwizard.C_push.mean, dropwizard.C_pull.mean)"
-            },
-            {
               "refId": "J",
-              "target": "alias(asPercent(dropwizard.A_pull.mean, #D), 'A')",
-              "targetFull": "alias(asPercent(dropwizard.A_pull.mean, sumSeries(dropwizard.A_push.mean, dropwizard.A_pull.mean)), 'A')"
+              "target": "alias(stats.timers.kamon-application.A_backpressure_ratio.mean, 'A')"
             },
             {
-              "refId": "K",
-              "target": "alias(asPercent(dropwizard.B_pull.mean, #E), 'B')",
-              "targetFull": "alias(asPercent(dropwizard.B_pull.mean, sumSeries(dropwizard.B_push.mean, dropwizard.B_pull.mean)), 'B')"
+              "refId": "A",
+              "target": "alias(stats.timers.kamon-application.B_backpressure_ratio.mean, 'B')"
             },
             {
-              "refId": "L",
-              "target": "alias(asPercent(dropwizard.C_pull.mean, #F), 'C')",
-              "targetFull": "alias(asPercent(dropwizard.C_pull.mean, sumSeries(dropwizard.C_push.mean, dropwizard.C_pull.mean)), 'C')"
+              "refId": "B",
+              "target": "alias(stats.timers.kamon-application.C_backpressure_ratio.mean, 'C')"
             }
           ],
           "thresholds": [],
@@ -610,273 +568,6 @@
               "show": true
             }
           ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6"
-    },
-    {
-      "collapse": false,
-      "height": 112,
-      "panels": [
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": "${DS_LOCAL_GRAPHITE}",
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 6,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 4,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "hide": true,
-              "refId": "A",
-              "target": "dropwizard.A_pull.count"
-            },
-            {
-              "hide": true,
-              "refId": "B",
-              "target": "dropwizard.A_push.count"
-            },
-            {
-              "refId": "C",
-              "target": "diffSeries(#A,#B)",
-              "targetFull": "diffSeries(dropwizard.A_pull.count,dropwizard.A_push.count)",
-              "textEditor": true
-            }
-          ],
-          "thresholds": "",
-          "title": "A backpressuring now",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "current"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": "${DS_LOCAL_GRAPHITE}",
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 7,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 4,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "hide": true,
-              "refId": "A",
-              "target": "dropwizard.B_pull.count"
-            },
-            {
-              "hide": true,
-              "refId": "B",
-              "target": "dropwizard.B_push.count"
-            },
-            {
-              "refId": "C",
-              "target": "diffSeries(#A,#B)",
-              "targetFull": "diffSeries(dropwizard.B_pull.count,dropwizard.B_push.count)",
-              "textEditor": true
-            }
-          ],
-          "thresholds": "",
-          "title": "B backpressuring now",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "current"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": "${DS_LOCAL_GRAPHITE}",
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 8,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 4,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "hide": true,
-              "refId": "A",
-              "target": "dropwizard.C_pull.count"
-            },
-            {
-              "hide": true,
-              "refId": "B",
-              "target": "dropwizard.C_push.count"
-            },
-            {
-              "refId": "C",
-              "target": "diffSeries(#A,#B)",
-              "targetFull": "diffSeries(dropwizard.C_pull.count,dropwizard.C_push.count)",
-              "textEditor": true
-            }
-          ],
-          "thresholds": "",
-          "title": "C backpressuring now",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "current"
         }
       ],
       "repeat": null,
@@ -923,6 +614,6 @@
     ]
   },
   "timezone": "",
-  "title": "streams-monitoring",
+  "title": "Kamon Demo Timeboard",
   "version": 4
 }

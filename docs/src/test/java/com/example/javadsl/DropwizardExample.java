@@ -1,5 +1,6 @@
 package com.example.javadsl;
 
+import akka.Done;
 import akka.actor.ActorSystem;
 import akka.stream.ActorMaterializer;
 import akka.stream.Materializer;
@@ -8,6 +9,8 @@ import akka.stream.checkpoint.DropwizardBackend;
 import akka.stream.checkpoint.javadsl.Checkpoint;
 import akka.stream.javadsl.Source;
 import com.codahale.metrics.MetricRegistry;
+
+import java.util.concurrent.CompletionStage;
 
 public class DropwizardExample {
 
@@ -19,11 +22,13 @@ public class DropwizardExample {
         final MetricRegistry metricRegistry = new MetricRegistry();
         final CheckpointBackend backend     = DropwizardBackend.fromRegistry(metricRegistry);
 
-        Source.range(1, 100)
-            .via(Checkpoint.create("produced", backend))
-            .filter(x -> x % 2 == 0)
-            .via(Checkpoint.create("filtered", backend))
-            .runForeach(System.out::println, materializer);
+        final CompletionStage<Done> done = Source.range(1, 100)
+                .via(Checkpoint.create("produced", backend))
+                .filter(x -> x % 2 == 0)
+                .via(Checkpoint.create("filtered", backend))
+                .runForeach(System.out::println, materializer);
         // #dropwizard
+
+        done.thenApply(d -> system.terminate());
     }
 }

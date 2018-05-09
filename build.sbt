@@ -55,7 +55,7 @@ lazy val root = project.in(file("."))
     noPublish,
     publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
   )
-  .aggregate(core, dropwizard, kamon, benchmarks, docs)
+  .aggregate(core, dropwizard, kamon, benchmarks, demo, docs)
 
 lazy val core = checkpointProject("core", Dependencies.core)
 
@@ -67,6 +67,9 @@ lazy val kamon = checkpointProject("kamon", Dependencies.kamon)
 
 lazy val benchmarks = checkpointProject("benchmarks", noPublish)
   .enablePlugins(JmhPlugin)
+  .dependsOn(dropwizard, kamon)
+
+lazy val demo = checkpointProject("demo", noPublish, Dependencies.docs)
   .dependsOn(dropwizard, kamon)
 
 lazy val docs =
@@ -87,8 +90,7 @@ lazy val docs =
       "extref.kamon-docs.base_url" → "http://kamon.io/documentation/1.x"
     ),
     sourceDirectory in Paradox := sourceDirectory.value / "main" / "paradox",
-    git.remoteRepo := "git@github.com:svezfaz/akka-stream-checkpoint.git",
-    Dependencies.docs
+    git.remoteRepo := "git@github.com:svezfaz/akka-stream-checkpoint.git"
   )
   .enablePlugins(ParadoxPlugin, ParadoxSitePlugin, GhpagesPlugin)
   .dependsOn(dropwizard, kamon)

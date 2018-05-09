@@ -9,6 +9,7 @@ import com.codahale.metrics.MetricRegistry
 object DropwizardExample extends App {
   implicit val system       = ActorSystem.create("DropwizardScalaExample")
   implicit val materializer = ActorMaterializer.create(system)
+  import system.dispatcher
 
   // #dropwizard
   implicit val metricRegistry = new MetricRegistry()
@@ -21,4 +22,5 @@ object DropwizardExample extends App {
     .via(Checkpoint("filtered"))
     .runForeach(println)
   // #dropwizard
+    .onComplete { _ ⇒  system.terminate() }
 }

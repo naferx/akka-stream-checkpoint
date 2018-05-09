@@ -9,6 +9,7 @@ import akka.stream.scaladsl.Source
 object CustomBackendExample extends App {
   implicit val system       = ActorSystem.create("CustomBackendScalaExample")
   implicit val materializer = ActorMaterializer.create(system)
+  import system.dispatcher
 
   // #custom
   implicit val loggingBackend: CheckpointBackend = new CheckpointBackend {
@@ -28,4 +29,5 @@ object CustomBackendExample extends App {
     .via(Checkpoint("filtered"))
     .runForeach(println)
   // #custom
+    .onComplete { _ ⇒  system.terminate() }
 }

@@ -8,6 +8,7 @@ import com.codahale.metrics.MetricRegistry
 object PimpedExample extends App {
   implicit val system       = ActorSystem.create("stream-checkpoint-java-demo")
   implicit val materializer = ActorMaterializer.create(system)
+  import system.dispatcher
 
   implicit val metricRegistry = new MetricRegistry()
 
@@ -21,4 +22,5 @@ object PimpedExample extends App {
     .checkpoint("filtered")
     .runForeach(println)
   // #pimped
+    .onComplete { _ ⇒  system.terminate() }
 }

@@ -8,6 +8,7 @@ import akka.stream.scaladsl.Source
 object KamonExample extends App {
   implicit val system       = ActorSystem.create("KamonScalaExample")
   implicit val materializer = ActorMaterializer.create(system)
+  import system.dispatcher
 
   // #kamon
   import akka.stream.checkpoint.KamonBackend._
@@ -18,4 +19,5 @@ object KamonExample extends App {
     .via(Checkpoint("filtered"))
     .runForeach(println)
   // #kamon
+    .onComplete { _ ⇒  system.terminate() }
 }
